@@ -1,5 +1,15 @@
-# Selective_SSM_for_EHR_Classification
-Project 24 for 02456 2024
+# Deep State Space Model for Mortality Classification using Electronic Health Records (EHRs).
+Project no. 24 for 02456 taken at Autumn 2024.
+
+# Project Description
+Electronic Health Records (EHRs) are an abundant resource for clinical research and are produced in increasing numbers around the world. Unfortunately, they are also noisy, collected at irregular times, and full of missing data points, making them challenging to learn from. Despite these issues, EHR data contains valuable information for patient outcome forecasting, disease classification, and imputation. As a result, many models have been developed to handle these tasks.
+For classification, most state-of-the-art models are RNNS, particularly variations of the LSTM and GRU architectures (ex: GRU-D, P-LSTM). The ability to handle variable input lengths and retain context from previous measurements is widely speculated to contribute to their dominance, but they are relatively slow and computationally expensive.
+
+Recent advances in deep-state space models (SSMs) have great potential for modelling time series. Similarly to RNNS, SSMs capture temporal dependencies and handle missing values by estimating hidden states from previous data. By learning the underlying state of the system (ex., patient health) from the observed measurements (ex., vital signs, lab results), SSMs can model the hidden dynamics of a patient’s condition while accounting for noise and irregularity. But unlike RNNs, SSMs do this in a more structured and interpretable way by relying on probabilistic transitions between states. They are also more computationally efficient and scalable.
+        
+This project focuses on implementing a deep-state space model for EHR mortality classification and comparing it to current state-of-the-art models. The model can be an adaptation of EHRMamba (easier) or implemented yourself (challenging). Preprocessed data from Physionet 2012, MIMIC-III, and code for several SOTA models will be readily available.
+        
+Supervised by; Rachael Marie De Vries (rachael.devries@bio.ku.dk)
 
 # Background
 This repository allows you to train and test a variety of electronic health record (EHR) classification models on mortality prediction for the Physionet 2012 Challenge (`P12`) dataset. More information on the dataset can be found here (https://physionet.org/content/challenge-2012/1.0.0/). Note that the data in the repository has already been preprocessed (outliers removed, normalized) in accordance with https://github.com/ExpectationMax/medical_ts_datasets/tree/master and saved as 5 randomized splits of train/validation/test data. Adam is used for optimization. Additionally, it is worth mentioning that the state-of-the-art model we're basing this task on is called Mamba and can be found here https://github.com/VectorInstitute/odyssey/tree/main/odyssey/models/ehr_mamba.
