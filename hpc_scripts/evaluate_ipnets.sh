@@ -1,7 +1,7 @@
 #!/bin/sh
 #BSUB -J ipnets_train
-#BSUB -o ipnets_train_%J.out
-#BSUB -e ipnets_train_%J.err
+#BSUB -o hpc_scripts/ipnets_train.out
+#BSUB -e hpc_scripts/ipnets_train.err
 #BSUB -q hpc
 #BSUB -n 4
 #BSUB -R "span[hosts=1]"
@@ -28,7 +28,7 @@ echo "Installing requirements..."
 pip install -r ../requirements.txt
 pip install torch_scatter --extra-index-url https://data.pyg.org/whl/torch-2.2.0+cu118.html
 
-python ../scripts/cli.py \
+python cli.py \
     --output_path=ipnets_output \
     --model_type=ipnets \
     --epochs=100 \

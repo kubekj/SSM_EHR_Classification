@@ -1,7 +1,7 @@
 #!/bin/sh
 #BSUB -J seft_train
-#BSUB -o seft_train_%J.out
-#BSUB -e seft_train_%J.err
+#BSUB -o hpc_scripts/seft_train.out
+#BSUB -e hpc_scripts/seft_train.err
 #BSUB -q hpc
 #BSUB -n 4
 #BSUB -R "span[hosts=1]"
@@ -28,7 +28,7 @@ echo "Installing requirements..."
 pip install -r ../requirements.txt
 pip install torch_scatter --extra-index-url https://data.pyg.org/whl/torch-2.2.0+cu118.html
 
-python ../scripts/cli.py \
+python cli.py \
     --output_path=seft_output \
     --model_type=seft \
     --epochs=100 \

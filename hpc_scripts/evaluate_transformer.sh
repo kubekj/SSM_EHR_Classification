@@ -1,7 +1,7 @@
 #!/bin/sh
 #BSUB -J transformer_train
-#BSUB -o transformer_train_%J.out
-#BSUB -e transformer_train_%J.err
+#BSUB -o hpc_scripts/transformer_train.out
+#BSUB -e hpc_scripts/transformer_train.err
 #BSUB -q hpc
 #BSUB -n 4
 #BSUB -R "span[hosts=1]"
@@ -28,7 +28,7 @@ echo "Installing requirements..."
 pip install -r ../requirements.txt
 pip install torch_scatter --extra-index-url https://data.pyg.org/whl/torch-2.2.0+cu118.html
 
-python ../scripts/cli.py \
+python cli.py \
     --output_path=transformer_output \
     --model_type=transformer \
     --epochs=100 \
