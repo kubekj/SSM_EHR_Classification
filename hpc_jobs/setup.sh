@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Set project root directory
 PROJECT_ROOT="/dtu/blackhole/10/203216/SSM_EHR_Classification"
 
 # Check if project directory exists
