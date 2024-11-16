@@ -10,7 +10,20 @@
 #BSUB -W 24:00
 #BSUB -N
 
-source ./hpc_jobs/setup.sh
+module load python3/3.9.19
+module load cuda/11.8
+module load cudnn/v8.8.0-prod-cuda-11.X
+
+if [ ! -d "venv" ]; then
+    echo "Creating new virtual environment..."
+    python -m venv ./venv
+fi
+
+source ./venv/bin/activate
+
+echo "Installing requirements..."
+pip install -r requirements.txt
+pip install torch_scatter --extra-index-url https://data.pyg.org/whl/torch-2.2.0+cu118.html
 
 # Run the evaluation
 python ./scripts/cli.py \

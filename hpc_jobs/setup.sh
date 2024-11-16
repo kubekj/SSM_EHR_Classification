@@ -1,5 +1,4 @@
 #!/bin/bash
-cd /dtu/blackhole/10/203216/SSM_EHR_Classification  # Main project directory
 module load python3/3.9.19
 module load cuda/11.8
 module load cudnn/v8.8.0-prod-cuda-11.X
