@@ -10,10 +10,14 @@
 #BSUB -W 24:00
 #BSUB -N
 
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$SCRIPT_DIR/setup.sh"
+# Define project root
+PROJECT_ROOT="/dtu/blackhole/10/203216/SSM_EHR_Classification"
 
-CLI_PATH="$PROJECT_ROOT/cli.py"
+# Run setup script with project root as parameter
+$PROJECT_ROOT setup.sh
+
+# Verify cli.py exists
+CLI_PATH="$PROJECT_ROOT/scripts/cli.py"
 if [ ! -f "$CLI_PATH" ]; then
     echo "Error: cli.py not found at $CLI_PATH"
     exit 1
