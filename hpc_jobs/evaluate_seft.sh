@@ -10,23 +10,17 @@
 #BSUB -W 24:00
 #BSUB -N
 
-module load python3/3.9.19
-module load cuda/11.8
-module load cudnn/v8.8.0-prod-cuda-11.X
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$SCRIPT_DIR/setup.sh"
 
-if [ ! -d "venv" ]; then
-    echo "Creating new virtual environment..."
-    python -m venv ./venv
+CLI_PATH="$PROJECT_ROOT/cli.py"
+if [ ! -f "$CLI_PATH" ]; then
+    echo "Error: cli.py not found at $CLI_PATH"
+    exit 1
 fi
 
-./venv/bin/activate
-
-echo "Installing requirements..."
-pip install -r requirements.txt
-pip install torch_scatter --extra-index-url https://data.pyg.org/whl/torch-2.2.0+cu118.html
-
-# Run the evaluation
-python ./scripts/cli.py \
+echo "Running training script from $(pwd)"
+python "$CLI_PATH" \
     --output_path=seft_output \
     --model_type=seft \
     --epochs=100 \
