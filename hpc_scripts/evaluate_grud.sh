@@ -21,7 +21,7 @@ if [ ! -d "../.venv" ]; then
     python -m venv ../.venv
 fi
 
-source ../.venv/bin/activate
+source .venv/bin/activate
 
 # Install requirements
 echo "Installing requirements..."
