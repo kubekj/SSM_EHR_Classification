@@ -18,7 +18,7 @@ module load cudnn/v8.8.0-prod-cuda-11.X
 # Create venv if it doesn't exist
 if [ ! -d ".venv" ]; then
     echo "Creating new virtual environment..."
-    python -m venv .venv
+    python -m venv ./venv
 fi
 
 source .venv/bin/activate
