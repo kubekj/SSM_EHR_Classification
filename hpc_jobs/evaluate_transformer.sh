@@ -1,0 +1,25 @@
+#!/bin/sh
+#BSUB -J transformer_evaluation
+#BSUB -o transformer_evaluation_%J.out
+#BSUB -e transformer_evaluation_%J.err
+#BSUB -n 4
+#BSUB -R "span[hosts=1]"
+#BSUB -R "rusage[mem=16GB]"
+#BSUB -M 20GB
+#BSUB -W 24:00
+#BSUB -N
+
+# Run setup script
+. setup.sh
+
+python cli.py \
+    --output_path=transformer_output \
+    --model_type=transformer \
+    --epochs=100 \
+    --batch_size=16 \
+    --dropout=0.2 \
+    --attn_dropout=0.1 \
+    --layers=3 \
+    --heads=1 \
+    --pooling=max \
+    --lr=0.0001
