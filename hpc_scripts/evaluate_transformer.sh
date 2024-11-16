@@ -25,7 +25,7 @@ source .venv/bin/activate
 
 # Install requirements
 echo "Installing requirements..."
-pip install -r ../requirements.txt
+pip install -r requirements.txt
 pip install torch_scatter --extra-index-url https://data.pyg.org/whl/torch-2.2.0+cu118.html
 
 python cli.py \
