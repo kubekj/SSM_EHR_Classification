@@ -19,7 +19,7 @@ if [ ! -d "venv" ]; then
     python -m venv ./venv
 fi
 
-source ./venv/bin/activate
+./venv/bin/activate
 
 echo "Installing requirements..."
 pip install -r requirements.txt
