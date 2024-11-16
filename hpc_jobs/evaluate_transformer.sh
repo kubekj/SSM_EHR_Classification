@@ -2,10 +2,11 @@
 #BSUB -J transformer_evaluation
 #BSUB -o transformer_evaluation_%J.out
 #BSUB -e transformer_evaluation_%J.err
+#BSUB -q hpc
 #BSUB -n 4
 #BSUB -R "span[hosts=1]"
-#BSUB -R "rusage[mem=16GB]"
-#BSUB -M 20GB
+#BSUB -R "rusage[mem=8GB]"
+#BSUB -M 10GB
 #BSUB -W 24:00
 #BSUB -N
 
