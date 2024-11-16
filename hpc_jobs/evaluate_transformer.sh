@@ -1,30 +1,27 @@
 #!/bin/sh
-#BSUB -J transformer_evaluation
-#BSUB -o transformer_evaluation.out
-#BSUB -e transformer_evaluation.err
+#BSUB -J transformer_train
+#BSUB -o transformer_train_%J.out
+#BSUB -e transformer_train_%J.err
 #BSUB -q hpc
 #BSUB -n 4
 #BSUB -R "span[hosts=1]"
-#BSUB -R "rusage[mem=8GB]"
-#BSUB -M 09GB
+#BSUB -R "rusage[mem=16GB]"
+#BSUB -M 20GB
 #BSUB -W 24:00
 #BSUB -N
 
-# Define project root
-PROJECT_ROOT="/dtu/blackhole/10/203216/SSM_EHR_Classification"
+cd /dtu/blackhole/10/203216/SSM_EHR_Classification
 
-# Run setup script with project root as parameter
-$PROJECT_ROOT setup.sh
+# Load modules and setup environment
+module load python3/3.9.19
+module load cuda/11.8
+module load cudnn/v8.8.0-prod-cuda-11.X
+python -m venv ./venv
+./venv/bin/activate
+pip install -r requirements.txt
+pip install torch_scatter --extra-index-url https://data.pyg.org/whl/torch-2.2.0+cu118.html
 
-# Verify cli.py exists
-CLI_PATH="$PROJECT_ROOT/scripts/cli.py"
-if [ ! -f "$CLI_PATH" ]; then
-    echo "Error: cli.py not found at $CLI_PATH"
-    exit 1
-fi
-
-echo "Running training script from $(pwd)"
-python "$CLI_PATH" \
+python scripts/cli.py \
     --output_path=transformer_output \
     --model_type=transformer \
     --epochs=100 \
