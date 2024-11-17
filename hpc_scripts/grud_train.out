@@ -1,0 +1,558 @@
+Installing requirements...
+Looking in indexes: https://pypi.org/simple, https://download.pytorch.org/whl/cu118
+Collecting torch==2.2.0 (from -r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/cu118/torch-2.2.0%2Bcu118-cp39-cp39-linux_x86_64.whl (811.7 MB)
+Collecting numpy==1.25.1 (from -r requirements.txt (line 3))
+  Using cached numpy-1.25.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.6 kB)
+Collecting tqdm==4.66.2 (from -r requirements.txt (line 4))
+  Using cached tqdm-4.66.2-py3-none-any.whl.metadata (57 kB)
+Collecting pandas==1.1.4 (from -r requirements.txt (line 5))
+  Using cached pandas-1.1.4-cp39-cp39-manylinux1_x86_64.whl.metadata (4.7 kB)
+Collecting h5py==3.12.1 (from -r requirements.txt (line 6))
+  Using cached h5py-3.12.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.5 kB)
+Collecting matplotlib==3.8.2 (from -r requirements.txt (line 7))
+  Using cached matplotlib-3.8.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.8 kB)
+Collecting matplotlib-inline==0.1.7 (from -r requirements.txt (line 8))
+  Using cached matplotlib_inline-0.1.7-py3-none-any.whl.metadata (3.9 kB)
+Collecting click==8.1.7 (from -r requirements.txt (line 9))
+  Using cached click-8.1.7-py3-none-any.whl.metadata (3.0 kB)
+Collecting scikit-learn==0.24.2 (from -r requirements.txt (line 10))
+  Using cached scikit_learn-0.24.2-cp39-cp39-manylinux2010_x86_64.whl.metadata (9.8 kB)
+Collecting x-transformers==1.16.23 (from -r requirements.txt (line 11))
+  Using cached x_transformers-1.16.23-py3-none-any.whl.metadata (666 bytes)
+Requirement already satisfied: filelock in /appl9/python/3.9.19/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (3.15.4)
+Collecting typing-extensions>=4.8.0 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
+Collecting sympy (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached sympy-1.13.3-py3-none-any.whl.metadata (12 kB)
+Collecting networkx (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/networkx-3.2.1-py3-none-any.whl (1.6 MB)
+Collecting jinja2 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached jinja2-3.1.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting fsspec (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached fsspec-2024.10.0-py3-none-any.whl.metadata (11 kB)
+Collecting nvidia-cuda-nvrtc-cu11==11.8.89 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cuda_nvrtc_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-runtime-cu11==11.8.89 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cuda_runtime_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-cupti-cu11==11.8.87 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cuda_cupti_cu11-11.8.87-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cudnn-cu11==8.7.0.84 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/cu118/nvidia_cudnn_cu11-8.7.0.84-py3-none-manylinux1_x86_64.whl (728.5 MB)
+Collecting nvidia-cublas-cu11==11.11.3.6 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cublas_cu11-11.11.3.6-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cufft-cu11==10.9.0.58 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cufft_cu11-10.9.0.58-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-curand-cu11==10.3.0.86 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_curand_cu11-10.3.0.86-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cusolver-cu11==11.4.1.48 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cusolver_cu11-11.4.1.48-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cusparse-cu11==11.7.5.86 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cusparse_cu11-11.7.5.86-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-nccl-cu11==2.19.3 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/cu118/nvidia_nccl_cu11-2.19.3-py3-none-manylinux1_x86_64.whl (135.3 MB)
+Collecting nvidia-nvtx-cu11==11.8.86 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_nvtx_cu11-11.8.86-py3-none-manylinux2014_x86_64.whl.metadata (1.7 kB)
+Collecting triton==2.2.0 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/triton-2.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (167.9 MB)
+Collecting python-dateutil>=2.7.3 (from pandas==1.1.4->-r requirements.txt (line 5))
+  Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting pytz>=2017.2 (from pandas==1.1.4->-r requirements.txt (line 5))
+  Using cached pytz-2024.2-py2.py3-none-any.whl.metadata (22 kB)
+Collecting contourpy>=1.0.1 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached contourpy-1.3.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.4 kB)
+Collecting cycler>=0.10 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+Collecting fonttools>=4.22.0 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached fonttools-4.55.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (164 kB)
+Collecting kiwisolver>=1.3.1 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached kiwisolver-1.4.7-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl.metadata (6.3 kB)
+Collecting packaging>=20.0 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached packaging-24.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting pillow>=8 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached pillow-11.0.0-cp39-cp39-manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+Collecting pyparsing>=2.3.1 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached pyparsing-3.2.0-py3-none-any.whl.metadata (5.0 kB)
+Collecting importlib-resources>=3.2.0 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached importlib_resources-6.4.5-py3-none-any.whl.metadata (4.0 kB)
+Collecting traitlets (from matplotlib-inline==0.1.7->-r requirements.txt (line 8))
+  Using cached traitlets-5.14.3-py3-none-any.whl.metadata (10 kB)
+Collecting scipy>=0.19.1 (from scikit-learn==0.24.2->-r requirements.txt (line 10))
+  Using cached scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+Collecting joblib>=0.11 (from scikit-learn==0.24.2->-r requirements.txt (line 10))
+  Using cached joblib-1.4.2-py3-none-any.whl.metadata (5.4 kB)
+Collecting threadpoolctl>=2.0.0 (from scikit-learn==0.24.2->-r requirements.txt (line 10))
+  Using cached threadpoolctl-3.5.0-py3-none-any.whl.metadata (13 kB)
+Collecting einops>=0.6.1 (from x-transformers==1.16.23->-r requirements.txt (line 11))
+  Using cached einops-0.8.0-py3-none-any.whl.metadata (12 kB)
+Collecting zipp>=3.1.0 (from importlib-resources>=3.2.0->matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached zipp-3.21.0-py3-none-any.whl.metadata (3.7 kB)
+Collecting six>=1.5 (from python-dateutil>=2.7.3->pandas==1.1.4->-r requirements.txt (line 5))
+  Using cached six-1.16.0-py2.py3-none-any.whl.metadata (1.8 kB)
+Collecting MarkupSafe>=2.0 (from jinja2->torch==2.2.0->-r requirements.txt (line 2))
+  Using cached MarkupSafe-3.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.0 kB)
+Collecting mpmath<1.4,>=1.1.0 (from sympy->torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/mpmath-1.3.0-py3-none-any.whl (536 kB)
+Using cached numpy-1.25.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (17.7 MB)
+Using cached tqdm-4.66.2-py3-none-any.whl (78 kB)
+Using cached pandas-1.1.4-cp39-cp39-manylinux1_x86_64.whl (9.3 MB)
+Using cached h5py-3.12.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (5.4 MB)
+Using cached matplotlib-3.8.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (11.6 MB)
+Using cached matplotlib_inline-0.1.7-py3-none-any.whl (9.9 kB)
+Using cached click-8.1.7-py3-none-any.whl (97 kB)
+Using cached scikit_learn-0.24.2-cp39-cp39-manylinux2010_x86_64.whl (23.8 MB)
+Using cached x_transformers-1.16.23-py3-none-any.whl (26 kB)
+Using cached nvidia_cublas_cu11-11.11.3.6-py3-none-manylinux2014_x86_64.whl (417.9 MB)
+Using cached nvidia_cuda_cupti_cu11-11.8.87-py3-none-manylinux2014_x86_64.whl (13.1 MB)
+Using cached nvidia_cuda_nvrtc_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl (23.2 MB)
+Using cached nvidia_cuda_runtime_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl (875 kB)
+Using cached nvidia_cufft_cu11-10.9.0.58-py3-none-manylinux2014_x86_64.whl (168.4 MB)
+Using cached nvidia_curand_cu11-10.3.0.86-py3-none-manylinux2014_x86_64.whl (58.1 MB)
+Using cached nvidia_cusolver_cu11-11.4.1.48-py3-none-manylinux2014_x86_64.whl (128.2 MB)
+Using cached nvidia_cusparse_cu11-11.7.5.86-py3-none-manylinux2014_x86_64.whl (204.1 MB)
+Using cached nvidia_nvtx_cu11-11.8.86-py3-none-manylinux2014_x86_64.whl (99 kB)
+Using cached contourpy-1.3.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (321 kB)
+Using cached cycler-0.12.1-py3-none-any.whl (8.3 kB)
+Using cached einops-0.8.0-py3-none-any.whl (43 kB)
+Using cached fonttools-4.55.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.6 MB)
+Using cached importlib_resources-6.4.5-py3-none-any.whl (36 kB)
+Using cached joblib-1.4.2-py3-none-any.whl (301 kB)
+Using cached kiwisolver-1.4.7-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (1.6 MB)
+Using cached packaging-24.2-py3-none-any.whl (65 kB)
+Using cached pillow-11.0.0-cp39-cp39-manylinux_2_28_x86_64.whl (4.4 MB)
+Using cached pyparsing-3.2.0-py3-none-any.whl (106 kB)
+Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Using cached pytz-2024.2-py2.py3-none-any.whl (508 kB)
+Using cached scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (38.6 MB)
+Using cached threadpoolctl-3.5.0-py3-none-any.whl (18 kB)
+Using cached typing_extensions-4.12.2-py3-none-any.whl (37 kB)
+Using cached fsspec-2024.10.0-py3-none-any.whl (179 kB)
+Using cached jinja2-3.1.4-py3-none-any.whl (133 kB)
+Using cached sympy-1.13.3-py3-none-any.whl (6.2 MB)
+Using cached traitlets-5.14.3-py3-none-any.whl (85 kB)
+Using cached MarkupSafe-3.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (20 kB)
+Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Using cached zipp-3.21.0-py3-none-any.whl (9.6 kB)
+Installing collected packages: pytz, mpmath, zipp, typing-extensions, triton, traitlets, tqdm, threadpoolctl, sympy, six, pyparsing, pillow, packaging, nvidia-nvtx-cu11, nvidia-nccl-cu11, nvidia-cusparse-cu11, nvidia-curand-cu11, nvidia-cufft-cu11, nvidia-cuda-runtime-cu11, nvidia-cuda-nvrtc-cu11, nvidia-cuda-cupti-cu11, nvidia-cublas-cu11, numpy, networkx, MarkupSafe, kiwisolver, joblib, fsspec, fonttools, einops, cycler, click, scipy, python-dateutil, nvidia-cusolver-cu11, nvidia-cudnn-cu11, matplotlib-inline, jinja2, importlib-resources, h5py, contourpy, torch, scikit-learn, pandas, matplotlib, x-transformers
+Installing requirements...
+Looking in indexes: https://pypi.org/simple, https://download.pytorch.org/whl/cu118
+Requirement already satisfied: torch==2.2.0 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 2)) (2.2.0+cu118)
+Requirement already satisfied: numpy==1.25.1 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 3)) (1.25.1)
+Requirement already satisfied: tqdm==4.66.2 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 4)) (4.66.2)
+Requirement already satisfied: pandas==1.1.4 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 5)) (1.1.4)
+Requirement already satisfied: h5py==3.12.1 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 6)) (3.12.1)
+Requirement already satisfied: matplotlib==3.8.2 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 7)) (3.8.2)
+Requirement already satisfied: matplotlib-inline==0.1.7 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 8)) (0.1.7)
+Requirement already satisfied: click==8.1.7 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 9)) (8.1.7)
+Requirement already satisfied: scikit-learn==0.24.2 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 10)) (0.24.2)
+Requirement already satisfied: x-transformers==1.16.23 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 11)) (1.16.23)
+Requirement already satisfied: filelock in /appl9/python/3.9.19/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (3.15.4)
+Requirement already satisfied: typing-extensions>=4.8.0 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (4.12.2)
+Requirement already satisfied: sympy in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (1.13.3)
+Requirement already satisfied: networkx in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (3.2.1)
+Requirement already satisfied: jinja2 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (3.1.4)
+Requirement already satisfied: fsspec in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (2024.10.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu11==11.8.89 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.8.89)
+Requirement already satisfied: nvidia-cuda-runtime-cu11==11.8.89 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.8.89)
+Requirement already satisfied: nvidia-cuda-cupti-cu11==11.8.87 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.8.87)
+Requirement already satisfied: nvidia-cudnn-cu11==8.7.0.84 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (8.7.0.84)
+Requirement already satisfied: nvidia-cublas-cu11==11.11.3.6 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.11.3.6)
+Requirement already satisfied: nvidia-cufft-cu11==10.9.0.58 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (10.9.0.58)
+Requirement already satisfied: nvidia-curand-cu11==10.3.0.86 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (10.3.0.86)
+Requirement already satisfied: nvidia-cusolver-cu11==11.4.1.48 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.4.1.48)
+Requirement already satisfied: nvidia-cusparse-cu11==11.7.5.86 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.7.5.86)
+Requirement already satisfied: nvidia-nccl-cu11==2.19.3 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (2.19.3)
+Requirement already satisfied: nvidia-nvtx-cu11==11.8.86 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.8.86)
+Requirement already satisfied: triton==2.2.0 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (2.2.0)
+Requirement already satisfied: python-dateutil>=2.7.3 in ./.venv/lib/python3.9/site-packages (from pandas==1.1.4->-r requirements.txt (line 5)) (2.9.0.post0)
+Requirement already satisfied: pytz>=2017.2 in ./.venv/lib/python3.9/site-packages (from pandas==1.1.4->-r requirements.txt (line 5)) (2024.2)
+Requirement already satisfied: contourpy>=1.0.1 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (1.3.0)
+Requirement already satisfied: cycler>=0.10 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (4.55.0)
+Requirement already satisfied: kiwisolver>=1.3.1 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (1.4.7)
+Requirement already satisfied: packaging>=20.0 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (24.2)
+Requirement already satisfied: pillow>=8 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (11.0.0)
+Requirement already satisfied: pyparsing>=2.3.1 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (3.2.0)
+Requirement already satisfied: importlib-resources>=3.2.0 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (6.4.5)
+Requirement already satisfied: traitlets in ./.venv/lib/python3.9/site-packages (from matplotlib-inline==0.1.7->-r requirements.txt (line 8)) (5.14.3)
+Requirement already satisfied: scipy>=0.19.1 in ./.venv/lib/python3.9/site-packages (from scikit-learn==0.24.2->-r requirements.txt (line 10)) (1.13.1)
+Requirement already satisfied: joblib>=0.11 in ./.venv/lib/python3.9/site-packages (from scikit-learn==0.24.2->-r requirements.txt (line 10)) (1.4.2)
+Requirement already satisfied: threadpoolctl>=2.0.0 in ./.venv/lib/python3.9/site-packages (from scikit-learn==0.24.2->-r requirements.txt (line 10)) (3.5.0)
+Requirement already satisfied: einops>=0.6.1 in ./.venv/lib/python3.9/site-packages (from x-transformers==1.16.23->-r requirements.txt (line 11)) (0.8.0)
+Requirement already satisfied: zipp>=3.1.0 in ./.venv/lib/python3.9/site-packages (from importlib-resources>=3.2.0->matplotlib==3.8.2->-r requirements.txt (line 7)) (3.21.0)
+Requirement already satisfied: six>=1.5 in ./.venv/lib/python3.9/site-packages (from python-dateutil>=2.7.3->pandas==1.1.4->-r requirements.txt (line 5)) (1.16.0)
+Requirement already satisfied: MarkupSafe>=2.0 in ./.venv/lib/python3.9/site-packages (from jinja2->torch==2.2.0->-r requirements.txt (line 2)) (3.0.2)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in ./.venv/lib/python3.9/site-packages (from sympy->torch==2.2.0->-r requirements.txt (line 2)) (1.3.0)
+Looking in indexes: https://pypi.org/simple, https://data.pyg.org/whl/torch-2.2.0+cu118.html
+Requirement already satisfied: torch_scatter in ./.venv/lib/python3.9/site-packages (2.1.2)
+Successfully installed MarkupSafe-3.0.2 click-8.1.7 contourpy-1.3.0 cycler-0.12.1 einops-0.8.0 fonttools-4.55.0 fsspec-2024.10.0 h5py-3.12.1 importlib-resources-6.4.5 jinja2-3.1.4 joblib-1.4.2 kiwisolver-1.4.7 matplotlib-3.8.2 matplotlib-inline-0.1.7 mpmath-1.3.0 networkx-3.2.1 numpy-1.25.1 nvidia-cublas-cu11-11.11.3.6 nvidia-cuda-cupti-cu11-11.8.87 nvidia-cuda-nvrtc-cu11-11.8.89 nvidia-cuda-runtime-cu11-11.8.89 nvidia-cudnn-cu11-8.7.0.84 nvidia-cufft-cu11-10.9.0.58 nvidia-curand-cu11-10.3.0.86 nvidia-cusolver-cu11-11.4.1.48 nvidia-cusparse-cu11-11.7.5.86 nvidia-nccl-cu11-2.19.3 nvidia-nvtx-cu11-11.8.86 packaging-24.2 pandas-1.1.4 pillow-11.0.0 pyparsing-3.2.0 python-dateutil-2.9.0.post0 pytz-2024.2 scikit-learn-0.24.2 scipy-1.13.1 six-1.16.0 sympy-1.13.3 threadpoolctl-3.5.0 torch-2.2.0+cu118 tqdm-4.66.2 traitlets-5.14.3 triton-2.2.0 typing-extensions-4.12.2 x-transformers-1.16.23 zipp-3.21.0
+Looking in indexes: https://pypi.org/simple, https://data.pyg.org/whl/torch-2.2.0+cu118.html
+Requirement already satisfied: torch_scatter in ./.venv/lib/python3.9/site-packages (2.1.2)
+Loading preprocessed datasets from ./processed_datasets
+Loaded dataset from ./processed_datasets/physionet2012_1_pos.h5
+Loaded dataset from ./processed_datasets/physionet2012_1_neg.h5
+Loaded dataset from ./processed_datasets/physionet2012_1_val.h5
+Loaded dataset from ./processed_datasets/physionet2012_1_test.h5
+# of trainable parameters: 100812
+Epoch: 1, Train Loss: 0.6345650237940607, Val Loss: 0.5359317064285278
+Validation loss decreased (inf --> 0.234119).  Saving model ...
+Epoch: 2, Train Loss: 0.5669385833399636, Val Loss: 0.5345343351364136
+Validation loss decreased (0.234119 --> 0.228458).  Saving model ...
+Epoch: 3, Train Loss: 0.5383008907711695, Val Loss: 0.4818951189517975
+Validation loss decreased (0.228458 --> 0.219646).  Saving model ...
+Epoch: 4, Train Loss: 0.5261816104489659, Val Loss: 0.47600317001342773
+Validation loss decreased (0.219646 --> 0.209520).  Saving model ...
+Epoch: 5, Train Loss: 0.5123606127878976, Val Loss: 0.5764486789703369
+Validation loss decreased (0.209520 --> 0.196433).  Saving model ...
+Epoch: 6, Train Loss: 0.5041389673475235, Val Loss: 0.4883122444152832
+Validation loss decreased (0.196433 --> 0.190257).  Saving model ...
+Epoch: 7, Train Loss: 0.4925971534990129, Val Loss: 0.52094966173172
+Validation loss decreased (0.190257 --> 0.181512).  Saving model ...
+Epoch: 8, Train Loss: 0.4855917135164851, Val Loss: 0.5519590377807617
+Validation loss decreased (0.181512 --> 0.174878).  Saving model ...
+Epoch: 9, Train Loss: 0.486316389152928, Val Loss: 0.4762077033519745
+EarlyStopping counter: 1 out of 10
+Epoch: 10, Train Loss: 0.4775130625755068, Val Loss: 0.49770933389663696
+Validation loss decreased (0.174878 --> 0.171304).  Saving model ...
+Epoch: 11, Train Loss: 0.4697941033140061, Val Loss: 0.4463770389556885
+EarlyStopping counter: 1 out of 10
+Epoch: 12, Train Loss: 0.4653042297041605, Val Loss: 0.4771924614906311
+Validation loss decreased (0.171304 --> 0.166761).  Saving model ...
+Epoch: 13, Train Loss: 0.46280663886240553, Val Loss: 0.4449268579483032
+Validation loss decreased (0.166761 --> 0.163614).  Saving model ...
+Epoch: 14, Train Loss: 0.4595153010080731, Val Loss: 0.4677274823188782
+Validation loss decreased (0.163614 --> 0.161219).  Saving model ...
+Epoch: 15, Train Loss: 0.4564708627405621, Val Loss: 0.4896153211593628
+EarlyStopping counter: 1 out of 10
+Epoch: 16, Train Loss: 0.4483520419942954, Val Loss: 0.46750953793525696
+Validation loss decreased (0.161219 --> 0.160385).  Saving model ...
+Epoch: 17, Train Loss: 0.4468277232159698, Val Loss: 0.4901467263698578
+EarlyStopping counter: 1 out of 10
+Epoch: 18, Train Loss: 0.44301851543169174, Val Loss: 0.47195127606391907
+Validation loss decreased (0.160385 --> 0.155518).  Saving model ...
+Epoch: 19, Train Loss: 0.434393491241194, Val Loss: 0.4689980745315552
+EarlyStopping counter: 1 out of 10
+Epoch: 20, Train Loss: 0.43712391751626184, Val Loss: 0.46746259927749634
+EarlyStopping counter: 2 out of 10
+Epoch: 21, Train Loss: 0.43452877793756745, Val Loss: 0.469117134809494
+EarlyStopping counter: 3 out of 10
+Epoch: 22, Train Loss: 0.4301086991197533, Val Loss: 0.48748117685317993
+Validation loss decreased (0.155518 --> 0.155281).  Saving model ...
+Epoch: 23, Train Loss: 0.428490021576484, Val Loss: 0.46507999300956726
+EarlyStopping counter: 1 out of 10
+Epoch: 24, Train Loss: 0.42340660550528103, Val Loss: 0.4340573847293854
+EarlyStopping counter: 2 out of 10
+Epoch: 25, Train Loss: 0.42489912964048837, Val Loss: 0.43285924196243286
+EarlyStopping counter: 3 out of 10
+Epoch: 26, Train Loss: 0.42085354160221794, Val Loss: 0.4582062363624573
+EarlyStopping counter: 4 out of 10
+Epoch: 27, Train Loss: 0.417723395758205, Val Loss: 0.44686540961265564
+EarlyStopping counter: 5 out of 10
+Epoch: 28, Train Loss: 0.4171101437319839, Val Loss: 0.5204460024833679
+EarlyStopping counter: 6 out of 10
+Epoch: 29, Train Loss: 0.41276471222203875, Val Loss: 0.45371586084365845
+Validation loss decreased (0.155281 --> 0.155152).  Saving model ...
+Epoch: 30, Train Loss: 0.40985264339380795, Val Loss: 0.44993090629577637
+EarlyStopping counter: 1 out of 10
+Epoch: 31, Train Loss: 0.40616812214018805, Val Loss: 0.4925442039966583
+EarlyStopping counter: 2 out of 10
+Epoch: 32, Train Loss: 0.4083689282692614, Val Loss: 0.43881112337112427
+EarlyStopping counter: 3 out of 10
+Epoch: 33, Train Loss: 0.40310785162543494, Val Loss: 0.5272179245948792
+EarlyStopping counter: 4 out of 10
+Epoch: 34, Train Loss: 0.39399722762524136, Val Loss: 0.44333696365356445
+EarlyStopping counter: 5 out of 10
+Epoch: 35, Train Loss: 0.3964402379970702, Val Loss: 0.45910847187042236
+EarlyStopping counter: 6 out of 10
+Epoch: 36, Train Loss: 0.396670490385048, Val Loss: 0.44321438670158386
+EarlyStopping counter: 7 out of 10
+Epoch: 37, Train Loss: 0.3907450425128142, Val Loss: 0.43736234307289124
+EarlyStopping counter: 8 out of 10
+Epoch: 38, Train Loss: 0.388024742818541, Val Loss: 0.4558822214603424
+EarlyStopping counter: 9 out of 10
+Epoch: 39, Train Loss: 0.3858920994495589, Val Loss: 0.5216279029846191
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.4257822632789612
+{'0': {'precision': 0.9620403321470937, 'recall': 0.7889105058365758, 'f1-score': 0.8669160876536611, 'support': 1028}, '1': {'precision': 0.3904494382022472, 'recall': 0.8128654970760234, 'f1-score': 0.5275142314990512, 'support': 171}, 'accuracy': 0.79232693911593, 'macro avg': {'precision': 0.6762448851746705, 'recall': 0.8008880014562996, 'f1-score': 0.6972151595763562, 'support': 1199}, 'weighted avg': {'precision': 0.8805206967304393, 'recall': 0.79232693911593, 'f1-score': 0.8185109855665567, 'support': 1199}}
+[[811 217]
+ [ 32 139]]
+Accuracy = 0.79232693911593
+AUPRC = 0.5463658381470041
+AUROC = 0.8682674585295925
+Loading preprocessed datasets from ./processed_datasets
+Loaded dataset from ./processed_datasets/physionet2012_2_pos.h5
+Loaded dataset from ./processed_datasets/physionet2012_2_neg.h5
+Loaded dataset from ./processed_datasets/physionet2012_2_val.h5
+Loaded dataset from ./processed_datasets/physionet2012_2_test.h5
+# of trainable parameters: 100812
+Epoch: 1, Train Loss: 0.644696727860719, Val Loss: 0.5282443165779114
+Validation loss decreased (inf --> 0.181740).  Saving model ...
+Epoch: 2, Train Loss: 0.5704065093304962, Val Loss: 0.45859453082084656
+Validation loss decreased (0.181740 --> 0.164454).  Saving model ...
+Epoch: 3, Train Loss: 0.5390897854231298, Val Loss: 0.437240332365036
+Validation loss decreased (0.164454 --> 0.156047).  Saving model ...
+Epoch: 4, Train Loss: 0.5244742057984695, Val Loss: 0.4722501337528229
+Validation loss decreased (0.156047 --> 0.151604).  Saving model ...
+Epoch: 5, Train Loss: 0.5039312494918704, Val Loss: 0.4515083432197571
+Validation loss decreased (0.151604 --> 0.146318).  Saving model ...
+Epoch: 6, Train Loss: 0.4963800519471988, Val Loss: 0.4432726800441742
+EarlyStopping counter: 1 out of 10
+Epoch: 7, Train Loss: 0.48840415943413973, Val Loss: 0.4183017611503601
+Validation loss decreased (0.146318 --> 0.141791).  Saving model ...
+Epoch: 8, Train Loss: 0.48205888899974525, Val Loss: 0.43278074264526367
+Validation loss decreased (0.141791 --> 0.139498).  Saving model ...
+Epoch: 9, Train Loss: 0.47213452315190807, Val Loss: 0.44658684730529785
+EarlyStopping counter: 1 out of 10
+Epoch: 10, Train Loss: 0.46708061220124364, Val Loss: 0.4680021405220032
+EarlyStopping counter: 2 out of 10
+Epoch: 11, Train Loss: 0.4662664891802706, Val Loss: 0.4262602627277374
+Validation loss decreased (0.139498 --> 0.139334).  Saving model ...
+Epoch: 12, Train Loss: 0.4602570228744298, Val Loss: 0.41727882623672485
+Validation loss decreased (0.139334 --> 0.136590).  Saving model ...
+Epoch: 13, Train Loss: 0.45137814327608794, Val Loss: 0.39941996335983276
+Validation loss decreased (0.136590 --> 0.135252).  Saving model ...
+Epoch: 14, Train Loss: 0.4519915848504752, Val Loss: 0.4594447612762451
+Validation loss decreased (0.135252 --> 0.135040).  Saving model ...
+Epoch: 15, Train Loss: 0.4502922768006101, Val Loss: 0.42281749844551086
+EarlyStopping counter: 1 out of 10
+Epoch: 16, Train Loss: 0.444542245415505, Val Loss: 0.44730696082115173
+EarlyStopping counter: 2 out of 10
+Epoch: 17, Train Loss: 0.4467111947014928, Val Loss: 0.4069317877292633
+EarlyStopping counter: 3 out of 10
+Epoch: 18, Train Loss: 0.43742258532438427, Val Loss: 0.42896607518196106
+Validation loss decreased (0.135040 --> 0.134207).  Saving model ...
+Epoch: 19, Train Loss: 0.43378209706861526, Val Loss: 0.40530768036842346
+EarlyStopping counter: 1 out of 10
+Epoch: 20, Train Loss: 0.43262066232273355, Val Loss: 0.5109097957611084
+EarlyStopping counter: 2 out of 10
+Epoch: 21, Train Loss: 0.42876945238094777, Val Loss: 0.43189266324043274
+EarlyStopping counter: 3 out of 10
+Epoch: 22, Train Loss: 0.41906360822031274, Val Loss: 0.40207648277282715
+EarlyStopping counter: 4 out of 10
+Epoch: 23, Train Loss: 0.4235917018959299, Val Loss: 0.4285655915737152
+EarlyStopping counter: 5 out of 10
+Epoch: 24, Train Loss: 0.41707871336257085, Val Loss: 0.4148966670036316
+Validation loss decreased (0.134207 --> 0.133862).  Saving model ...
+Epoch: 25, Train Loss: 0.41522889130283147, Val Loss: 0.4263085424900055
+EarlyStopping counter: 1 out of 10
+Epoch: 26, Train Loss: 0.4158404428162612, Val Loss: 0.4360063374042511
+Validation loss decreased (0.133862 --> 0.133804).  Saving model ...
+Epoch: 27, Train Loss: 0.41056856780778617, Val Loss: 0.4294584393501282
+EarlyStopping counter: 1 out of 10
+Epoch: 28, Train Loss: 0.4097727310145274, Val Loss: 0.43167105317115784
+EarlyStopping counter: 2 out of 10
+Epoch: 29, Train Loss: 0.4050876504043117, Val Loss: 0.4792407155036926
+EarlyStopping counter: 3 out of 10
+Epoch: 30, Train Loss: 0.40536687639541924, Val Loss: 0.4094313085079193
+EarlyStopping counter: 4 out of 10
+Epoch: 31, Train Loss: 0.4025399660458788, Val Loss: 0.43521803617477417
+EarlyStopping counter: 5 out of 10
+Epoch: 32, Train Loss: 0.39414411335019395, Val Loss: 0.4042394161224365
+EarlyStopping counter: 6 out of 10
+Epoch: 33, Train Loss: 0.39264829075546004, Val Loss: 0.44216176867485046
+EarlyStopping counter: 7 out of 10
+Epoch: 34, Train Loss: 0.39353262551594526, Val Loss: 0.44644173979759216
+EarlyStopping counter: 8 out of 10
+Epoch: 35, Train Loss: 0.3891362940776162, Val Loss: 0.4322965443134308
+EarlyStopping counter: 9 out of 10
+Epoch: 36, Train Loss: 0.38292987510794774, Val Loss: 0.42794162034988403
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.44250309467315674
+{'0': {'precision': 0.9597633136094674, 'recall': 0.7798076923076923, 'f1-score': 0.8604774535809019, 'support': 1040}, '1': {'precision': 0.3531073446327684, 'recall': 0.7861635220125787, 'f1-score': 0.4873294346978557, 'support': 159}, 'accuracy': 0.780650542118432, 'macro avg': {'precision': 0.6564353291211179, 'recall': 0.7829856071601355, 'f1-score': 0.6739034441393787, 'support': 1199}, 'weighted avg': {'precision': 0.8793143569228158, 'recall': 0.780650542118432, 'f1-score': 0.8109941049550433, 'support': 1199}}
+[[811 229]
+ [ 34 125]]
+Accuracy = 0.780650542118432
+AUPRC = 0.5309599209555165
+AUROC = 0.8646044992743106
+Loading preprocessed datasets from ./processed_datasets
+Loaded dataset from ./processed_datasets/physionet2012_3_pos.h5
+Loaded dataset from ./processed_datasets/physionet2012_3_neg.h5
+Loaded dataset from ./processed_datasets/physionet2012_3_val.h5
+Loaded dataset from ./processed_datasets/physionet2012_3_test.h5
+# of trainable parameters: 100812
+Epoch: 1, Train Loss: 0.6282244741212665, Val Loss: 0.5141084790229797
+Validation loss decreased (inf --> 0.151088).  Saving model ...
+Epoch: 2, Train Loss: 0.5622516902178292, Val Loss: 0.4953513443470001
+Validation loss decreased (0.151088 --> 0.141320).  Saving model ...
+Epoch: 3, Train Loss: 0.5332418946534629, Val Loss: 0.4787537455558777
+Validation loss decreased (0.141320 --> 0.140104).  Saving model ...
+Epoch: 4, Train Loss: 0.5151456330470213, Val Loss: 0.49279066920280457
+Validation loss decreased (0.140104 --> 0.139203).  Saving model ...
+Epoch: 5, Train Loss: 0.506638627352677, Val Loss: 0.4418342113494873
+Validation loss decreased (0.139203 --> 0.135955).  Saving model ...
+Epoch: 6, Train Loss: 0.49422720813845084, Val Loss: 0.48712897300720215
+Validation loss decreased (0.135955 --> 0.132625).  Saving model ...
+Epoch: 7, Train Loss: 0.48747726160240923, Val Loss: 0.41513973474502563
+Validation loss decreased (0.132625 --> 0.132575).  Saving model ...
+Epoch: 8, Train Loss: 0.4779927499416306, Val Loss: 0.4170990288257599
+Validation loss decreased (0.132575 --> 0.129429).  Saving model ...
+Epoch: 9, Train Loss: 0.4744787865032361, Val Loss: 0.466220885515213
+EarlyStopping counter: 1 out of 10
+Epoch: 10, Train Loss: 0.4702140819134675, Val Loss: 0.4153568744659424
+EarlyStopping counter: 2 out of 10
+Epoch: 11, Train Loss: 0.4703583850517986, Val Loss: 0.4183333218097687
+EarlyStopping counter: 3 out of 10
+Epoch: 12, Train Loss: 0.4624909837766895, Val Loss: 0.4680215120315552
+EarlyStopping counter: 4 out of 10
+Epoch: 13, Train Loss: 0.4581600752637142, Val Loss: 0.4297616183757782
+EarlyStopping counter: 5 out of 10
+Epoch: 14, Train Loss: 0.4559456302425054, Val Loss: 0.46681973338127136
+EarlyStopping counter: 6 out of 10
+Epoch: 15, Train Loss: 0.44932641652156047, Val Loss: 0.4443974196910858
+EarlyStopping counter: 7 out of 10
+Epoch: 16, Train Loss: 0.44976883299472764, Val Loss: 0.3734571039676666
+EarlyStopping counter: 8 out of 10
+Epoch: 17, Train Loss: 0.4433832991076267, Val Loss: 0.40806663036346436
+EarlyStopping counter: 9 out of 10
+Epoch: 18, Train Loss: 0.44063962679209673, Val Loss: 0.4201580584049225
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.4149520993232727
+{'0': {'precision': 0.9463869463869464, 'recall': 0.7945205479452054, 'f1-score': 0.8638297872340426, 'support': 1022}, '1': {'precision': 0.3841642228739003, 'recall': 0.7401129943502824, 'f1-score': 0.5057915057915057, 'support': 177}, 'accuracy': 0.786488740617181, 'macro avg': {'precision': 0.6652755846304234, 'recall': 0.767316771147744, 'f1-score': 0.6848106465127741, 'support': 1199}, 'weighted avg': {'precision': 0.8633899304888569, 'recall': 0.786488740617181, 'f1-score': 0.810975095144527, 'support': 1199}}
+[[812 210]
+ [ 46 131]]
+Accuracy = 0.786488740617181
+AUPRC = 0.49960050260770966
+AUROC = 0.8610069985737504
+Loading preprocessed datasets from ./processed_datasets
+Loaded dataset from ./processed_datasets/physionet2012_4_pos.h5
+Loaded dataset from ./processed_datasets/physionet2012_4_neg.h5
+Loaded dataset from ./processed_datasets/physionet2012_4_val.h5
+Loaded dataset from ./processed_datasets/physionet2012_4_test.h5
+# of trainable parameters: 100812
+Epoch: 1, Train Loss: 0.6350006992910423, Val Loss: 0.5568873882293701
+Validation loss decreased (inf --> 0.228734).  Saving model ...
+Epoch: 2, Train Loss: 0.5608996187939363, Val Loss: 0.49404430389404297
+Validation loss decreased (0.228734 --> 0.216306).  Saving model ...
+Epoch: 3, Train Loss: 0.5305972945456411, Val Loss: 0.4959297776222229
+Validation loss decreased (0.216306 --> 0.198864).  Saving model ...
+Epoch: 4, Train Loss: 0.516409224505518, Val Loss: 0.4786991775035858
+Validation loss decreased (0.198864 --> 0.185959).  Saving model ...
+Epoch: 5, Train Loss: 0.5041597178169325, Val Loss: 0.4903458058834076
+Validation loss decreased (0.185959 --> 0.180366).  Saving model ...
+Epoch: 6, Train Loss: 0.4996638438280891, Val Loss: 0.4692908525466919
+Validation loss decreased (0.180366 --> 0.175161).  Saving model ...
+Epoch: 7, Train Loss: 0.48773651625595843, Val Loss: 0.47259053587913513
+Validation loss decreased (0.175161 --> 0.171552).  Saving model ...
+Epoch: 8, Train Loss: 0.48467558984662973, Val Loss: 0.49842703342437744
+Validation loss decreased (0.171552 --> 0.168233).  Saving model ...
+Epoch: 9, Train Loss: 0.474760135716083, Val Loss: 0.5072869062423706
+Validation loss decreased (0.168233 --> 0.167375).  Saving model ...
+Epoch: 10, Train Loss: 0.4719848861881331, Val Loss: 0.44403815269470215
+Validation loss decreased (0.167375 --> 0.165309).  Saving model ...
+Epoch: 11, Train Loss: 0.46207511939254464, Val Loss: 0.4273037314414978
+Validation loss decreased (0.165309 --> 0.161944).  Saving model ...
+Epoch: 12, Train Loss: 0.45564710416045845, Val Loss: 0.45966655015945435
+EarlyStopping counter: 1 out of 10
+Epoch: 13, Train Loss: 0.4526357012636521, Val Loss: 0.4555235505104065
+EarlyStopping counter: 2 out of 10
+Epoch: 14, Train Loss: 0.4534603745913973, Val Loss: 0.4304872155189514
+EarlyStopping counter: 3 out of 10
+Epoch: 15, Train Loss: 0.4482271317173453, Val Loss: 0.4593595862388611
+Validation loss decreased (0.161944 --> 0.161816).  Saving model ...
+Epoch: 16, Train Loss: 0.4418359568306044, Val Loss: 0.473388671875
+EarlyStopping counter: 1 out of 10
+Epoch: 17, Train Loss: 0.43239529173748165, Val Loss: 0.49275997281074524
+EarlyStopping counter: 2 out of 10
+Epoch: 18, Train Loss: 0.43577782277967414, Val Loss: 0.4427119791507721
+Validation loss decreased (0.161816 --> 0.159042).  Saving model ...
+Epoch: 19, Train Loss: 0.4331208653894125, Val Loss: 0.4277384877204895
+Validation loss decreased (0.159042 --> 0.156402).  Saving model ...
+Epoch: 20, Train Loss: 0.4273818236355688, Val Loss: 0.4642019271850586
+EarlyStopping counter: 1 out of 10
+Epoch: 21, Train Loss: 0.423820661037576, Val Loss: 0.443869024515152
+EarlyStopping counter: 2 out of 10
+Epoch: 22, Train Loss: 0.42564794356916463, Val Loss: 0.4397590160369873
+EarlyStopping counter: 3 out of 10
+Epoch: 23, Train Loss: 0.4183331560270459, Val Loss: 0.4546177387237549
+EarlyStopping counter: 4 out of 10
+Epoch: 24, Train Loss: 0.4118402408618553, Val Loss: 0.437017023563385
+EarlyStopping counter: 5 out of 10
+Epoch: 25, Train Loss: 0.41538247857608046, Val Loss: 0.4229426681995392
+EarlyStopping counter: 6 out of 10
+Epoch: 26, Train Loss: 0.41193442549191267, Val Loss: 0.40772396326065063
+EarlyStopping counter: 7 out of 10
+Epoch: 27, Train Loss: 0.4101918146306393, Val Loss: 0.4485326409339905
+EarlyStopping counter: 8 out of 10
+Epoch: 28, Train Loss: 0.40354677725072, Val Loss: 0.46428894996643066
+EarlyStopping counter: 9 out of 10
+Epoch: 29, Train Loss: 0.40387955518329843, Val Loss: 0.46311649680137634
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.38581138849258423
+{'0': {'precision': 0.9431438127090301, 'recall': 0.8294117647058824, 'f1-score': 0.8826291079812209, 'support': 1020}, '1': {'precision': 0.423841059602649, 'recall': 0.7150837988826816, 'f1-score': 0.5322245322245323, 'support': 179}, 'accuracy': 0.8123436196830692, 'macro avg': {'precision': 0.6834924361558395, 'recall': 0.772247781794282, 'f1-score': 0.7074268201028766, 'support': 1199}, 'weighted avg': {'precision': 0.8656165459817223, 'recall': 0.8123436196830692, 'f1-score': 0.8303168318674199, 'support': 1199}}
+[[846 174]
+ [ 51 128]]
+Accuracy = 0.8123436196830692
+AUPRC = 0.5695841469828965
+AUROC = 0.8669679044802279
+Loading preprocessed datasets from ./processed_datasets
+Loaded dataset from ./processed_datasets/physionet2012_5_pos.h5
+Loaded dataset from ./processed_datasets/physionet2012_5_neg.h5
+Loaded dataset from ./processed_datasets/physionet2012_5_val.h5
+Loaded dataset from ./processed_datasets/physionet2012_5_test.h5
+# of trainable parameters: 100812
+Epoch: 1, Train Loss: 0.636652554360386, Val Loss: 0.5249108672142029
+Validation loss decreased (inf --> 0.208251).  Saving model ...
+Epoch: 2, Train Loss: 0.5728714863459269, Val Loss: 0.5383508205413818
+Validation loss decreased (0.208251 --> 0.175421).  Saving model ...
+Epoch: 3, Train Loss: 0.5378571463270663, Val Loss: 0.4610317647457123
+Validation loss decreased (0.175421 --> 0.164467).  Saving model ...
+Epoch: 4, Train Loss: 0.5227802095513691, Val Loss: 0.47535136342048645
+Validation loss decreased (0.164467 --> 0.161662).  Saving model ...
+Epoch: 5, Train Loss: 0.5090301614040615, Val Loss: 0.46999433636665344
+Validation loss decreased (0.161662 --> 0.155088).  Saving model ...
+Epoch: 6, Train Loss: 0.4977494932397115, Val Loss: 0.4833337366580963
+Validation loss decreased (0.155088 --> 0.150502).  Saving model ...
+Epoch: 7, Train Loss: 0.4979023612550392, Val Loss: 0.4343644380569458
+EarlyStopping counter: 1 out of 10
+Epoch: 8, Train Loss: 0.4839433367681686, Val Loss: 0.42448562383651733
+Validation loss decreased (0.150502 --> 0.146553).  Saving model ...
+Epoch: 9, Train Loss: 0.47787437082707196, Val Loss: 0.465450644493103
+Validation loss decreased (0.146553 --> 0.145384).  Saving model ...
+Epoch: 10, Train Loss: 0.4715644330699782, Val Loss: 0.46927616000175476
+Validation loss decreased (0.145384 --> 0.141604).  Saving model ...
+Epoch: 11, Train Loss: 0.46825981733899463, Val Loss: 0.4156559407711029
+Validation loss decreased (0.141604 --> 0.141566).  Saving model ...
+Epoch: 12, Train Loss: 0.4662441400047463, Val Loss: 0.39834922552108765
+Validation loss decreased (0.141566 --> 0.138979).  Saving model ...
+Epoch: 13, Train Loss: 0.4631639287389558, Val Loss: 0.4220147728919983
+Validation loss decreased (0.138979 --> 0.135980).  Saving model ...
+Epoch: 14, Train Loss: 0.45929958651349007, Val Loss: 0.4225720465183258
+EarlyStopping counter: 1 out of 10
+Epoch: 15, Train Loss: 0.45143611375171105, Val Loss: 0.4504239857196808
+Validation loss decreased (0.135980 --> 0.134224).  Saving model ...
+Epoch: 16, Train Loss: 0.45204961368407326, Val Loss: 0.4200175404548645
+EarlyStopping counter: 1 out of 10
+Epoch: 17, Train Loss: 0.44985299905712123, Val Loss: 0.4201821982860565
+Validation loss decreased (0.134224 --> 0.133756).  Saving model ...
+Epoch: 18, Train Loss: 0.44253311708740806, Val Loss: 0.3953666687011719
+EarlyStopping counter: 1 out of 10
+Epoch: 19, Train Loss: 0.4371162026092924, Val Loss: 0.40815821290016174
+EarlyStopping counter: 2 out of 10
+Epoch: 20, Train Loss: 0.4405797517847741, Val Loss: 0.37543126940727234
+EarlyStopping counter: 3 out of 10
+Epoch: 21, Train Loss: 0.4365269887150476, Val Loss: 0.4161270558834076
+EarlyStopping counter: 4 out of 10
+Epoch: 22, Train Loss: 0.4310585133074801, Val Loss: 0.40328848361968994
+EarlyStopping counter: 5 out of 10
+Epoch: 23, Train Loss: 0.42589168496058816, Val Loss: 0.43533119559288025
+EarlyStopping counter: 6 out of 10
+Epoch: 24, Train Loss: 0.42347233893770825, Val Loss: 0.3837518095970154
+EarlyStopping counter: 7 out of 10
+Epoch: 25, Train Loss: 0.41975021539291657, Val Loss: 0.43284085392951965
+EarlyStopping counter: 8 out of 10
+Epoch: 26, Train Loss: 0.4207365758916884, Val Loss: 0.4107760787010193
+EarlyStopping counter: 9 out of 10
+Epoch: 27, Train Loss: 0.4207231399257064, Val Loss: 0.36442968249320984
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.45786523818969727
+{'0': {'precision': 0.9529553679131484, 'recall': 0.7647628267182962, 'f1-score': 0.8485499462943072, 'support': 1033}, '1': {'precision': 0.34324324324324323, 'recall': 0.7650602409638554, 'f1-score': 0.47388059701492535, 'support': 166}, 'accuracy': 0.7648040033361134, 'macro avg': {'precision': 0.6480993055781958, 'recall': 0.7649115338410758, 'f1-score': 0.6612152716546162, 'support': 1199}, 'weighted avg': {'precision': 0.8685415124542625, 'recall': 0.7648040033361134, 'f1-score': 0.7966774592381126, 'support': 1199}}
+[[790 243]
+ [ 39 127]]
+Accuracy = 0.7648040033361134
+AUPRC = 0.494031834693617
+AUROC = 0.8572178355240905
