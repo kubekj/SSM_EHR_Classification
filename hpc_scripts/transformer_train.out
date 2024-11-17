@@ -1,0 +1,525 @@
+Installing requirements...
+Looking in indexes: https://pypi.org/simple, https://download.pytorch.org/whl/cu118
+Collecting torch==2.2.0 (from -r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/cu118/torch-2.2.0%2Bcu118-cp39-cp39-linux_x86_64.whl (811.7 MB)
+Collecting numpy==1.25.1 (from -r requirements.txt (line 3))
+  Using cached numpy-1.25.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.6 kB)
+Collecting tqdm==4.66.2 (from -r requirements.txt (line 4))
+  Using cached tqdm-4.66.2-py3-none-any.whl.metadata (57 kB)
+Collecting pandas==1.1.4 (from -r requirements.txt (line 5))
+  Using cached pandas-1.1.4-cp39-cp39-manylinux1_x86_64.whl.metadata (4.7 kB)
+Collecting h5py==3.12.1 (from -r requirements.txt (line 6))
+  Using cached h5py-3.12.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (2.5 kB)
+Collecting matplotlib==3.8.2 (from -r requirements.txt (line 7))
+  Using cached matplotlib-3.8.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.8 kB)
+Collecting matplotlib-inline==0.1.7 (from -r requirements.txt (line 8))
+  Using cached matplotlib_inline-0.1.7-py3-none-any.whl.metadata (3.9 kB)
+Collecting click==8.1.7 (from -r requirements.txt (line 9))
+  Using cached click-8.1.7-py3-none-any.whl.metadata (3.0 kB)
+Collecting scikit-learn==0.24.2 (from -r requirements.txt (line 10))
+  Using cached scikit_learn-0.24.2-cp39-cp39-manylinux2010_x86_64.whl.metadata (9.8 kB)
+Collecting x-transformers==1.16.23 (from -r requirements.txt (line 11))
+  Using cached x_transformers-1.16.23-py3-none-any.whl.metadata (666 bytes)
+Requirement already satisfied: filelock in /appl9/python/3.9.19/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (3.15.4)
+Collecting typing-extensions>=4.8.0 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached typing_extensions-4.12.2-py3-none-any.whl.metadata (3.0 kB)
+Collecting sympy (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached sympy-1.13.3-py3-none-any.whl.metadata (12 kB)
+Collecting networkx (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/networkx-3.2.1-py3-none-any.whl (1.6 MB)
+Collecting jinja2 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached jinja2-3.1.4-py3-none-any.whl.metadata (2.6 kB)
+Collecting fsspec (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached fsspec-2024.10.0-py3-none-any.whl.metadata (11 kB)
+Collecting nvidia-cuda-nvrtc-cu11==11.8.89 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cuda_nvrtc_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-runtime-cu11==11.8.89 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cuda_runtime_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cuda-cupti-cu11==11.8.87 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cuda_cupti_cu11-11.8.87-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cudnn-cu11==8.7.0.84 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/cu118/nvidia_cudnn_cu11-8.7.0.84-py3-none-manylinux1_x86_64.whl (728.5 MB)
+Collecting nvidia-cublas-cu11==11.11.3.6 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cublas_cu11-11.11.3.6-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cufft-cu11==10.9.0.58 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cufft_cu11-10.9.0.58-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-curand-cu11==10.3.0.86 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_curand_cu11-10.3.0.86-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-cusolver-cu11==11.4.1.48 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cusolver_cu11-11.4.1.48-py3-none-manylinux2014_x86_64.whl.metadata (1.6 kB)
+Collecting nvidia-cusparse-cu11==11.7.5.86 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_cusparse_cu11-11.7.5.86-py3-none-manylinux2014_x86_64.whl.metadata (1.5 kB)
+Collecting nvidia-nccl-cu11==2.19.3 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/cu118/nvidia_nccl_cu11-2.19.3-py3-none-manylinux1_x86_64.whl (135.3 MB)
+Collecting nvidia-nvtx-cu11==11.8.86 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached nvidia_nvtx_cu11-11.8.86-py3-none-manylinux2014_x86_64.whl.metadata (1.7 kB)
+Collecting triton==2.2.0 (from torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/triton-2.2.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (167.9 MB)
+Collecting python-dateutil>=2.7.3 (from pandas==1.1.4->-r requirements.txt (line 5))
+  Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl.metadata (8.4 kB)
+Collecting pytz>=2017.2 (from pandas==1.1.4->-r requirements.txt (line 5))
+  Using cached pytz-2024.2-py2.py3-none-any.whl.metadata (22 kB)
+Collecting contourpy>=1.0.1 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached contourpy-1.3.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (5.4 kB)
+Collecting cycler>=0.10 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached cycler-0.12.1-py3-none-any.whl.metadata (3.8 kB)
+Collecting fonttools>=4.22.0 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached fonttools-4.55.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (164 kB)
+Collecting kiwisolver>=1.3.1 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached kiwisolver-1.4.7-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl.metadata (6.3 kB)
+Collecting packaging>=20.0 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached packaging-24.2-py3-none-any.whl.metadata (3.2 kB)
+Collecting pillow>=8 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached pillow-11.0.0-cp39-cp39-manylinux_2_28_x86_64.whl.metadata (9.1 kB)
+Collecting pyparsing>=2.3.1 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached pyparsing-3.2.0-py3-none-any.whl.metadata (5.0 kB)
+Collecting importlib-resources>=3.2.0 (from matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached importlib_resources-6.4.5-py3-none-any.whl.metadata (4.0 kB)
+Collecting traitlets (from matplotlib-inline==0.1.7->-r requirements.txt (line 8))
+  Using cached traitlets-5.14.3-py3-none-any.whl.metadata (10 kB)
+Collecting scipy>=0.19.1 (from scikit-learn==0.24.2->-r requirements.txt (line 10))
+  Using cached scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (60 kB)
+Collecting joblib>=0.11 (from scikit-learn==0.24.2->-r requirements.txt (line 10))
+  Using cached joblib-1.4.2-py3-none-any.whl.metadata (5.4 kB)
+Collecting threadpoolctl>=2.0.0 (from scikit-learn==0.24.2->-r requirements.txt (line 10))
+  Using cached threadpoolctl-3.5.0-py3-none-any.whl.metadata (13 kB)
+Collecting einops>=0.6.1 (from x-transformers==1.16.23->-r requirements.txt (line 11))
+  Using cached einops-0.8.0-py3-none-any.whl.metadata (12 kB)
+Collecting zipp>=3.1.0 (from importlib-resources>=3.2.0->matplotlib==3.8.2->-r requirements.txt (line 7))
+  Using cached zipp-3.21.0-py3-none-any.whl.metadata (3.7 kB)
+Collecting six>=1.5 (from python-dateutil>=2.7.3->pandas==1.1.4->-r requirements.txt (line 5))
+  Using cached six-1.16.0-py2.py3-none-any.whl.metadata (1.8 kB)
+Collecting MarkupSafe>=2.0 (from jinja2->torch==2.2.0->-r requirements.txt (line 2))
+  Using cached MarkupSafe-3.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (4.0 kB)
+Collecting mpmath<1.4,>=1.1.0 (from sympy->torch==2.2.0->-r requirements.txt (line 2))
+  Using cached https://download.pytorch.org/whl/mpmath-1.3.0-py3-none-any.whl (536 kB)
+Using cached numpy-1.25.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (17.7 MB)
+Using cached tqdm-4.66.2-py3-none-any.whl (78 kB)
+Using cached pandas-1.1.4-cp39-cp39-manylinux1_x86_64.whl (9.3 MB)
+Using cached h5py-3.12.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (5.4 MB)
+Using cached matplotlib-3.8.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (11.6 MB)
+Using cached matplotlib_inline-0.1.7-py3-none-any.whl (9.9 kB)
+Using cached click-8.1.7-py3-none-any.whl (97 kB)
+Using cached scikit_learn-0.24.2-cp39-cp39-manylinux2010_x86_64.whl (23.8 MB)
+Using cached x_transformers-1.16.23-py3-none-any.whl (26 kB)
+Using cached nvidia_cublas_cu11-11.11.3.6-py3-none-manylinux2014_x86_64.whl (417.9 MB)
+Using cached nvidia_cuda_cupti_cu11-11.8.87-py3-none-manylinux2014_x86_64.whl (13.1 MB)
+Using cached nvidia_cuda_nvrtc_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl (23.2 MB)
+Using cached nvidia_cuda_runtime_cu11-11.8.89-py3-none-manylinux2014_x86_64.whl (875 kB)
+Using cached nvidia_cufft_cu11-10.9.0.58-py3-none-manylinux2014_x86_64.whl (168.4 MB)
+Using cached nvidia_curand_cu11-10.3.0.86-py3-none-manylinux2014_x86_64.whl (58.1 MB)
+Using cached nvidia_cusolver_cu11-11.4.1.48-py3-none-manylinux2014_x86_64.whl (128.2 MB)
+Using cached nvidia_cusparse_cu11-11.7.5.86-py3-none-manylinux2014_x86_64.whl (204.1 MB)
+Using cached nvidia_nvtx_cu11-11.8.86-py3-none-manylinux2014_x86_64.whl (99 kB)
+Using cached contourpy-1.3.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (321 kB)
+Using cached cycler-0.12.1-py3-none-any.whl (8.3 kB)
+Using cached einops-0.8.0-py3-none-any.whl (43 kB)
+Using cached fonttools-4.55.0-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (4.6 MB)
+Using cached importlib_resources-6.4.5-py3-none-any.whl (36 kB)
+Using cached joblib-1.4.2-py3-none-any.whl (301 kB)
+Using cached kiwisolver-1.4.7-cp39-cp39-manylinux_2_12_x86_64.manylinux2010_x86_64.whl (1.6 MB)
+Using cached packaging-24.2-py3-none-any.whl (65 kB)
+Using cached pillow-11.0.0-cp39-cp39-manylinux_2_28_x86_64.whl (4.4 MB)
+Using cached pyparsing-3.2.0-py3-none-any.whl (106 kB)
+Using cached python_dateutil-2.9.0.post0-py2.py3-none-any.whl (229 kB)
+Using cached pytz-2024.2-py2.py3-none-any.whl (508 kB)
+Using cached scipy-1.13.1-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (38.6 MB)
+Using cached threadpoolctl-3.5.0-py3-none-any.whl (18 kB)
+Using cached typing_extensions-4.12.2-py3-none-any.whl (37 kB)
+Using cached fsspec-2024.10.0-py3-none-any.whl (179 kB)
+Using cached jinja2-3.1.4-py3-none-any.whl (133 kB)
+Using cached sympy-1.13.3-py3-none-any.whl (6.2 MB)
+Using cached traitlets-5.14.3-py3-none-any.whl (85 kB)
+Using cached MarkupSafe-3.0.2-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (20 kB)
+Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Using cached zipp-3.21.0-py3-none-any.whl (9.6 kB)
+Installing collected packages: pytz, mpmath, zipp, typing-extensions, triton, traitlets, tqdm, threadpoolctl, sympy, six, pyparsing, pillow, packaging, nvidia-nvtx-cu11, nvidia-nccl-cu11, nvidia-cusparse-cu11, nvidia-curand-cu11, nvidia-cufft-cu11, nvidia-cuda-runtime-cu11, nvidia-cuda-nvrtc-cu11, nvidia-cuda-cupti-cu11, nvidia-cublas-cu11, numpy, networkx, MarkupSafe, kiwisolver, joblib, fsspec, fonttools, einops, cycler, click, scipy, python-dateutil, nvidia-cusolver-cu11, nvidia-cudnn-cu11, matplotlib-inline, jinja2, importlib-resources, h5py, contourpy, torch, scikit-learn, pandas, matplotlib, x-transformers
+Successfully installed MarkupSafe-3.0.2 click-8.1.7 contourpy-1.3.0 cycler-0.12.1 einops-0.8.0 fonttools-4.55.0 fsspec-2024.10.0 h5py-3.12.1 importlib-resources-6.4.5 jinja2-3.1.4 joblib-1.4.2 kiwisolver-1.4.7 matplotlib-3.8.2 matplotlib-inline-0.1.7 mpmath-1.3.0 networkx-3.2.1 numpy-1.25.1 nvidia-cublas-cu11-11.11.3.6 nvidia-cuda-cupti-cu11-11.8.87 nvidia-cuda-nvrtc-cu11-11.8.89 nvidia-cuda-runtime-cu11-11.8.89 nvidia-cudnn-cu11-8.7.0.84 nvidia-cufft-cu11-10.9.0.58 nvidia-curand-cu11-10.3.0.86 nvidia-cusolver-cu11-11.4.1.48 nvidia-cusparse-cu11-11.7.5.86 nvidia-nccl-cu11-2.19.3 nvidia-nvtx-cu11-11.8.86 packaging-24.2 pandas-1.1.4 pillow-11.0.0 pyparsing-3.2.0 python-dateutil-2.9.0.post0 pytz-2024.2 scikit-learn-0.24.2 scipy-1.13.1 six-1.16.0 sympy-1.13.3 threadpoolctl-3.5.0 torch-2.2.0+cu118 tqdm-4.66.2 traitlets-5.14.3 triton-2.2.0 typing-extensions-4.12.2 x-transformers-1.16.23 zipp-3.21.0
+Looking in indexes: https://pypi.org/simple, https://data.pyg.org/whl/torch-2.2.0+cu118.html
+Requirement already satisfied: torch_scatter in ./.venv/lib/python3.9/site-packages (2.1.2)
+Preprocessed files not found. Preprocessing the dataset...
+Loading dataset
+Preprocessing dataset
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+ady satisfied: numpy==1.25.1 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 3)) (1.25.1)
+Requirement already satisfied: tqdm==4.66.2 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 4)) (4.66.2)
+Requirement already satisfied: pandas==1.1.4 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 5)) (1.1.4)
+Requirement already satisfied: h5py==3.12.1 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 6)) (3.12.1)
+Requirement already satisfied: matplotlib==3.8.2 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 7)) (3.8.2)
+Requirement already satisfied: matplotlib-inline==0.1.7 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 8)) (0.1.7)
+Requirement already satisfied: click==8.1.7 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 9)) (8.1.7)
+Requirement already satisfied: scikit-learn==0.24.2 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 10)) (0.24.2)
+Requirement already satisfied: x-transformers==1.16.23 in ./.venv/lib/python3.9/site-packages (from -r requirements.txt (line 11)) (1.16.23)
+Requirement already satisfied: filelock in /appl9/python/3.9.19/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (3.15.4)
+Requirement already satisfied: typing-extensions>=4.8.0 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (4.12.2)
+Requirement already satisfied: sympy in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (1.13.3)
+Requirement already satisfied: networkx in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (3.2.1)
+Requirement already satisfied: jinja2 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (3.1.4)
+Requirement already satisfied: fsspec in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (2024.10.0)
+Requirement already satisfied: nvidia-cuda-nvrtc-cu11==11.8.89 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.8.89)
+Requirement already satisfied: nvidia-cuda-runtime-cu11==11.8.89 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.8.89)
+Requirement already satisfied: nvidia-cuda-cupti-cu11==11.8.87 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.8.87)
+Requirement already satisfied: nvidia-cudnn-cu11==8.7.0.84 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (8.7.0.84)
+Requirement already satisfied: nvidia-cublas-cu11==11.11.3.6 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.11.3.6)
+Requirement already satisfied: nvidia-cufft-cu11==10.9.0.58 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (10.9.0.58)
+Requirement already satisfied: nvidia-curand-cu11==10.3.0.86 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (10.3.0.86)
+Requirement already satisfied: nvidia-cusolver-cu11==11.4.1.48 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.4.1.48)
+Requirement already satisfied: nvidia-cusparse-cu11==11.7.5.86 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.7.5.86)
+Requirement already satisfied: nvidia-nccl-cu11==2.19.3 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (2.19.3)
+Requirement already satisfied: nvidia-nvtx-cu11==11.8.86 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (11.8.86)
+Requirement already satisfied: triton==2.2.0 in ./.venv/lib/python3.9/site-packages (from torch==2.2.0->-r requirements.txt (line 2)) (2.2.0)
+Requirement already satisfied: python-dateutil>=2.7.3 in ./.venv/lib/python3.9/site-packages (from pandas==1.1.4->-r requirements.txt (line 5)) (2.9.0.post0)
+Requirement already satisfied: pytz>=2017.2 in ./.venv/lib/python3.9/site-packages (from pandas==1.1.4->-r requirements.txt (line 5)) (2024.2)
+Requirement already satisfied: contourpy>=1.0.1 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (1.3.0)
+Requirement already satisfied: cycler>=0.10 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (0.12.1)
+Requirement already satisfied: fonttools>=4.22.0 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (4.55.0)
+Requirement already satisfied: kiwisolver>=1.3.1 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (1.4.7)
+Requirement already satisfied: packaging>=20.0 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (24.2)
+Requirement already satisfied: pillow>=8 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (11.0.0)
+Requirement already satisfied: pyparsing>=2.3.1 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (3.2.0)
+Requirement already satisfied: importlib-resources>=3.2.0 in ./.venv/lib/python3.9/site-packages (from matplotlib==3.8.2->-r requirements.txt (line 7)) (6.4.5)
+Requirement already satisfied: traitlets in ./.venv/lib/python3.9/site-packages (from matplotlib-inline==0.1.7->-r requirements.txt (line 8)) (5.14.3)
+Requirement already satisfied: scipy>=0.19.1 in ./.venv/lib/python3.9/site-packages (from scikit-learn==0.24.2->-r requirements.txt (line 10)) (1.13.1)
+Requirement already satisfied: joblib>=0.11 in ./.venv/lib/python3.9/site-packages (from scikit-learn==0.24.2->-r requirements.txt (line 10)) (1.4.2)
+Requirement already satisfied: threadpoolctl>=2.0.0 in ./.venv/lib/python3.9/site-packages (from scikit-learn==0.24.2->-r requirements.txt (line 10)) (3.5.0)
+Requirement already satisfied: einops>=0.6.1 in ./.venv/lib/python3.9/site-packages (from x-transformers==1.16.23->-r requirements.txt (line 11)) (0.8.0)
+Requirement already satisfied: zipp>=3.1.0 in ./.venv/lib/python3.9/site-packages (from importlib-resources>=3.2.0->matplotlib==3.8.2->-r requirements.txt (line 7)) (3.21.0)
+Requirement already satisfied: six>=1.5 in ./.venv/lib/python3.9/site-packages (from python-dateutil>=2.7.3->pandas==1.1.4->-r requirements.txt (line 5)) (1.16.0)
+Requirement already satisfied: MarkupSafe>=2.0 in ./.venv/lib/python3.9/site-packages (from jinja2->torch==2.2.0->-r requirements.txt (line 2)) (3.0.2)
+Requirement already satisfied: mpmath<1.4,>=1.1.0 in ./.venv/lib/python3.9/site-packages (from sympy->torch==2.2.0->-r requirements.txt (line 2)) (1.3.0)
+Looking in indexes: https://pypi.org/simple, https://data.pyg.org/whl/torch-2.2.0+cu118.html
+Requirement already satisfied: torch_scatter in ./.venv/lib/python3.9/site-packages (2.1.2)
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+shape of active data = torch.Size([1342, 37, 215])
+shape of time data = torch.Size([1342, 215])
+shape of static data = torch.Size([1342, 8])
+shape of labels = torch.Size([1342])
+shape of active data = torch.Size([8248, 37, 215])
+shape of time data = torch.Size([8248, 215])
+shape of static data = torch.Size([8248, 8])
+shape of labels = torch.Size([8248])
+Saving datasets to ./processed_datasets
+# of trainable parameters: 203716
+Epoch: 1, Train Loss: 0.5605306688045698, Val Loss: 0.5274409055709839
+Validation loss decreased (inf --> 0.172859).  Saving model ...
+Epoch: 2, Train Loss: 0.4851867691096332, Val Loss: 0.4588501751422882
+Validation loss decreased (0.172859 --> 0.159442).  Saving model ...
+Epoch: 3, Train Loss: 0.46037877738357535, Val Loss: 0.407575786113739
+Validation loss decreased (0.159442 --> 0.156161).  Saving model ...
+Epoch: 4, Train Loss: 0.44420453249698594, Val Loss: 0.40803858637809753
+EarlyStopping counter: 1 out of 10
+Epoch: 5, Train Loss: 0.4290040617897397, Val Loss: 0.4965035915374756
+EarlyStopping counter: 2 out of 10
+Epoch: 6, Train Loss: 0.4137370540863938, Val Loss: 0.5099982023239136
+EarlyStopping counter: 3 out of 10
+Epoch: 7, Train Loss: 0.39937053462638267, Val Loss: 0.4523776173591614
+EarlyStopping counter: 4 out of 10
+Epoch: 8, Train Loss: 0.38305646107192076, Val Loss: 0.5637254118919373
+EarlyStopping counter: 5 out of 10
+Epoch: 9, Train Loss: 0.3688096179671231, Val Loss: 0.511202871799469
+EarlyStopping counter: 6 out of 10
+Epoch: 10, Train Loss: 0.34902952355702244, Val Loss: 0.48817306756973267
+EarlyStopping counter: 7 out of 10
+Epoch: 11, Train Loss: 0.33221995313134456, Val Loss: 0.5232364535331726
+EarlyStopping counter: 8 out of 10
+Epoch: 12, Train Loss: 0.3091939265085828, Val Loss: 0.48075932264328003
+EarlyStopping counter: 9 out of 10
+Epoch: 13, Train Loss: 0.2897275893594183, Val Loss: 0.5459103584289551
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.3781851828098297
+{'0': {'precision': 0.944206008583691, 'recall': 0.8560311284046692, 'f1-score': 0.8979591836734693, 'support': 1028}, '1': {'precision': 0.44569288389513106, 'recall': 0.695906432748538, 'f1-score': 0.54337899543379, 'support': 171}, 'accuracy': 0.8331943286071727, 'macro avg': {'precision': 0.694949446239411, 'recall': 0.7759687805766036, 'f1-score': 0.7206690895536296, 'support': 1199}, 'weighted avg': {'precision': 0.8731086405088422, 'recall': 0.8331943286071727, 'f1-score': 0.8473893653340321, 'support': 1199}}
+[[880 148]
+ [ 52 119]]
+Accuracy = 0.8331943286071727
+AUPRC = 0.524044633931721
+AUROC = 0.8639326916513073
+Preprocessed files not found. Preprocessing the dataset...
+Loading dataset
+Preprocessing dataset
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+shape of active data = torch.Size([1361, 37, 215])
+shape of time data = torch.Size([1361, 215])
+shape of static data = torch.Size([1361, 8])
+shape of labels = torch.Size([1361])
+shape of active data = torch.Size([8229, 37, 215])
+shape of time data = torch.Size([8229, 215])
+shape of static data = torch.Size([8229, 8])
+shape of labels = torch.Size([8229])
+Saving datasets to ./processed_datasets
+# of trainable parameters: 203716
+Epoch: 1, Train Loss: 0.5599292193606875, Val Loss: 0.4994025230407715
+Validation loss decreased (inf --> 0.156153).  Saving model ...
+Epoch: 2, Train Loss: 0.48696040556038894, Val Loss: 0.38005927205085754
+Validation loss decreased (0.156153 --> 0.144763).  Saving model ...
+Epoch: 3, Train Loss: 0.4622692918940766, Val Loss: 0.430683970451355
+EarlyStopping counter: 1 out of 10
+Epoch: 4, Train Loss: 0.4459860056288788, Val Loss: 0.4380391240119934
+Validation loss decreased (0.144763 --> 0.140056).  Saving model ...
+Epoch: 5, Train Loss: 0.431556446707412, Val Loss: 0.46645388007164
+EarlyStopping counter: 1 out of 10
+Epoch: 6, Train Loss: 0.41918584654825775, Val Loss: 0.4952496290206909
+Validation loss decreased (0.140056 --> 0.137540).  Saving model ...
+Epoch: 7, Train Loss: 0.40263200713113795, Val Loss: 0.5310050249099731
+EarlyStopping counter: 1 out of 10
+Epoch: 8, Train Loss: 0.3902821429292517, Val Loss: 0.4474903643131256
+EarlyStopping counter: 2 out of 10
+Epoch: 9, Train Loss: 0.3777572540037786, Val Loss: 0.3922279179096222
+Validation loss decreased (0.137540 --> 0.136155).  Saving model ...
+Epoch: 10, Train Loss: 0.35436350451290255, Val Loss: 0.40656834840774536
+EarlyStopping counter: 1 out of 10
+Epoch: 11, Train Loss: 0.34144380041297867, Val Loss: 0.4108380377292633
+EarlyStopping counter: 2 out of 10
+Epoch: 12, Train Loss: 0.3244153387159284, Val Loss: 0.4020840525627136
+EarlyStopping counter: 3 out of 10
+Epoch: 13, Train Loss: 0.2981470278418694, Val Loss: 0.38085952401161194
+EarlyStopping counter: 4 out of 10
+Epoch: 14, Train Loss: 0.2833915784109362, Val Loss: 0.40276986360549927
+EarlyStopping counter: 5 out of 10
+Epoch: 15, Train Loss: 0.25834781706420645, Val Loss: 0.42397743463516235
+EarlyStopping counter: 6 out of 10
+Epoch: 16, Train Loss: 0.2360176700741461, Val Loss: 0.42327871918678284
+EarlyStopping counter: 7 out of 10
+Epoch: 17, Train Loss: 0.22261434424588358, Val Loss: 0.44335225224494934
+EarlyStopping counter: 8 out of 10
+Epoch: 18, Train Loss: 0.20018208795272674, Val Loss: 0.44845032691955566
+EarlyStopping counter: 9 out of 10
+Epoch: 19, Train Loss: 0.17800128432592183, Val Loss: 0.5074557065963745
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.3807283341884613
+{'0': {'precision': 0.9433760683760684, 'recall': 0.8490384615384615, 'f1-score': 0.8937246963562753, 'support': 1040}, '1': {'precision': 0.40304182509505704, 'recall': 0.6666666666666666, 'f1-score': 0.5023696682464455, 'support': 159}, 'accuracy': 0.8248540450375312, 'macro avg': {'precision': 0.6732089467355626, 'recall': 0.7578525641025641, 'f1-score': 0.6980471823013603, 'support': 1199}, 'weighted avg': {'precision': 0.8717220694755838, 'recall': 0.8248540450375312, 'f1-score': 0.8418269069739042, 'support': 1199}}
+[[883 157]
+ [ 53 106]]
+Accuracy = 0.8248540450375312
+AUPRC = 0.49764483778350344
+AUROC = 0.8573355104015481
+Preprocessed files not found. Preprocessing the dataset...
+Loading dataset
+Preprocessing dataset
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+shape of active data = torch.Size([1352, 37, 215])
+shape of time data = torch.Size([1352, 215])
+shape of static data = torch.Size([1352, 8])
+shape of labels = torch.Size([1352])
+shape of active data = torch.Size([8238, 37, 215])
+shape of time data = torch.Size([8238, 215])
+shape of static data = torch.Size([8238, 8])
+shape of labels = torch.Size([8238])
+Saving datasets to ./processed_datasets
+# of trainable parameters: 203716
+Epoch: 1, Train Loss: 0.5675262804097208, Val Loss: 0.4779920279979706
+Validation loss decreased (inf --> 0.148717).  Saving model ...
+Epoch: 2, Train Loss: 0.49028683687455554, Val Loss: 0.5613663196563721
+Validation loss decreased (0.148717 --> 0.139369).  Saving model ...
+Epoch: 3, Train Loss: 0.4687911944511609, Val Loss: 0.4275672435760498
+Validation loss decreased (0.139369 --> 0.132182).  Saving model ...
+Epoch: 4, Train Loss: 0.4548239750269602, Val Loss: 0.4496994912624359
+Validation loss decreased (0.132182 --> 0.125609).  Saving model ...
+Epoch: 5, Train Loss: 0.4353798114689144, Val Loss: 0.3986508846282959
+Validation loss decreased (0.125609 --> 0.123255).  Saving model ...
+Epoch: 6, Train Loss: 0.4224206902512902, Val Loss: 0.42545363306999207
+Validation loss decreased (0.123255 --> 0.120811).  Saving model ...
+Epoch: 7, Train Loss: 0.4044306953042687, Val Loss: 0.4763936400413513
+EarlyStopping counter: 1 out of 10
+Epoch: 8, Train Loss: 0.3972112914984513, Val Loss: 0.48713165521621704
+EarlyStopping counter: 2 out of 10
+Epoch: 9, Train Loss: 0.37418572287235036, Val Loss: 0.37663426995277405
+EarlyStopping counter: 3 out of 10
+Epoch: 10, Train Loss: 0.3602984260466442, Val Loss: 0.4528470039367676
+EarlyStopping counter: 4 out of 10
+Epoch: 11, Train Loss: 0.3437489270282215, Val Loss: 0.41436275839805603
+EarlyStopping counter: 5 out of 10
+Epoch: 12, Train Loss: 0.3214590748151143, Val Loss: 0.4041457772254944
+EarlyStopping counter: 6 out of 10
+Epoch: 13, Train Loss: 0.2987339531146798, Val Loss: 0.39446383714675903
+EarlyStopping counter: 7 out of 10
+Epoch: 14, Train Loss: 0.2779674681539131, Val Loss: 0.47270095348358154
+EarlyStopping counter: 8 out of 10
+Epoch: 15, Train Loss: 0.26179617421455403, Val Loss: 0.5410138368606567
+EarlyStopping counter: 9 out of 10
+Epoch: 16, Train Loss: 0.23708497342346804, Val Loss: 0.444071888923645
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.42973998188972473
+{'0': {'precision': 0.9464082098061574, 'recall': 0.812133072407045, 'f1-score': 0.8741442864665614, 'support': 1022}, '1': {'precision': 0.40372670807453415, 'recall': 0.7344632768361582, 'f1-score': 0.5210420841683367, 'support': 177}, 'accuracy': 0.8006672226855713, 'macro avg': {'precision': 0.6750674589403458, 'recall': 0.7732981746216017, 'f1-score': 0.6975931853174491, 'support': 1199}, 'weighted avg': {'precision': 0.8662959280659593, 'recall': 0.8006672226855713, 'f1-score': 0.8220182732832538, 'support': 1199}}
+[[830 192]
+ [ 47 130]]
+Accuracy = 0.8006672226855713
+AUPRC = 0.5261810978532242
+AUROC = 0.8688071467268125
+Preprocessed files not found. Preprocessing the dataset...
+Loading dataset
+Preprocessing dataset
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+shape of active data = torch.Size([1360, 37, 215])
+shape of time data = torch.Size([1360, 215])
+shape of static data = torch.Size([1360, 8])
+shape of labels = torch.Size([1360])
+shape of active data = torch.Size([8230, 37, 215])
+shape of time data = torch.Size([8230, 215])
+shape of static data = torch.Size([8230, 8])
+shape of labels = torch.Size([8230])
+Saving datasets to ./processed_datasets
+# of trainable parameters: 203716
+Epoch: 1, Train Loss: 0.5588331368039636, Val Loss: 0.4556165337562561
+Validation loss decreased (inf --> 0.159437).  Saving model ...
+Epoch: 2, Train Loss: 0.4804771795284514, Val Loss: 0.45281293988227844
+Validation loss decreased (0.159437 --> 0.150020).  Saving model ...
+Epoch: 3, Train Loss: 0.4593461401614488, Val Loss: 0.5406765937805176
+Validation loss decreased (0.150020 --> 0.148952).  Saving model ...
+Epoch: 4, Train Loss: 0.4377446535463427, Val Loss: 0.3798410892486572
+Validation loss decreased (0.148952 --> 0.144333).  Saving model ...
+Epoch: 5, Train Loss: 0.42382098916991084, Val Loss: 0.40464556217193604
+EarlyStopping counter: 1 out of 10
+Epoch: 6, Train Loss: 0.40875225604749194, Val Loss: 0.4479602873325348
+EarlyStopping counter: 2 out of 10
+Epoch: 7, Train Loss: 0.3926447879449994, Val Loss: 0.5119093656539917
+EarlyStopping counter: 3 out of 10
+Epoch: 8, Train Loss: 0.37591065251651934, Val Loss: 0.4756464660167694
+EarlyStopping counter: 4 out of 10
+Epoch: 9, Train Loss: 0.3570276207053194, Val Loss: 0.49204492568969727
+EarlyStopping counter: 5 out of 10
+Epoch: 10, Train Loss: 0.34000953717851173, Val Loss: 0.3760501444339752
+EarlyStopping counter: 6 out of 10
+Epoch: 11, Train Loss: 0.3209335323204012, Val Loss: 0.4614528715610504
+EarlyStopping counter: 7 out of 10
+Epoch: 12, Train Loss: 0.30644201752455796, Val Loss: 0.43193092942237854
+EarlyStopping counter: 8 out of 10
+Epoch: 13, Train Loss: 0.28482676345635866, Val Loss: 0.5137191414833069
+EarlyStopping counter: 9 out of 10
+Epoch: 14, Train Loss: 0.262917233886672, Val Loss: 0.6142740249633789
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.37132197618484497
+{'0': {'precision': 0.927061310782241, 'recall': 0.8598039215686275, 'f1-score': 0.8921668362156663, 'support': 1020}, '1': {'precision': 0.43478260869565216, 'recall': 0.6145251396648045, 'f1-score': 0.5092592592592592, 'support': 179}, 'accuracy': 0.823185988323603, 'macro avg': {'precision': 0.6809219597389465, 'recall': 0.737164530616716, 'f1-score': 0.7007130477374628, 'support': 1199}, 'weighted avg': {'precision': 0.8535684937067619, 'recall': 0.823185988323603, 'f1-score': 0.8350021520828915, 'support': 1199}}
+[[877 143]
+ [ 69 110]]
+Accuracy = 0.823185988323603
+AUPRC = 0.5302944530162176
+AUROC = 0.850783218315259
+Preprocessed files not found. Preprocessing the dataset...
+Loading dataset
+Preprocessing dataset
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+shape of active data = torch.Size([9590, 37, 215])
+shape of time data = torch.Size([9590, 215])
+shape of static data = torch.Size([9590, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+Preprocessing dataset
+shape of active data = torch.Size([1199, 37, 215])
+shape of time data = torch.Size([1199, 215])
+shape of static data = torch.Size([1199, 8])
+shape of active data = torch.Size([1387, 37, 215])
+shape of time data = torch.Size([1387, 215])
+shape of static data = torch.Size([1387, 8])
+shape of labels = torch.Size([1387])
+shape of active data = torch.Size([8203, 37, 215])
+shape of time data = torch.Size([8203, 215])
+shape of static data = torch.Size([8203, 8])
+shape of labels = torch.Size([8203])
+Saving datasets to ./processed_datasets
+# of trainable parameters: 203716
+Epoch: 1, Train Loss: 0.558463248089957, Val Loss: 0.414577841758728
+Validation loss decreased (inf --> 0.165973).  Saving model ...
+Epoch: 2, Train Loss: 0.48155220093173395, Val Loss: 0.4676707684993744
+Validation loss decreased (0.165973 --> 0.148652).  Saving model ...
+Epoch: 3, Train Loss: 0.45919612882347804, Val Loss: 0.5420523881912231
+Validation loss decreased (0.148652 --> 0.134656).  Saving model ...
+Epoch: 4, Train Loss: 0.4422644024961512, Val Loss: 0.41816461086273193
+EarlyStopping counter: 1 out of 10
+Epoch: 5, Train Loss: 0.4292016085273016, Val Loss: 0.47071167826652527
+Validation loss decreased (0.134656 --> 0.131875).  Saving model ...
+Epoch: 6, Train Loss: 0.4150644086029617, Val Loss: 0.3989025056362152
+EarlyStopping counter: 1 out of 10
+Epoch: 7, Train Loss: 0.39987459890329907, Val Loss: 0.37560591101646423
+Validation loss decreased (0.131875 --> 0.130319).  Saving model ...
+Epoch: 8, Train Loss: 0.39059758057635485, Val Loss: 0.47114065289497375
+EarlyStopping counter: 1 out of 10
+Epoch: 9, Train Loss: 0.3724908668211806, Val Loss: 0.45382925868034363
+EarlyStopping counter: 2 out of 10
+Epoch: 10, Train Loss: 0.35808579692341774, Val Loss: 0.44459429383277893
+EarlyStopping counter: 3 out of 10
+Epoch: 11, Train Loss: 0.3401633440132562, Val Loss: 0.4093449115753174
+EarlyStopping counter: 4 out of 10
+Epoch: 12, Train Loss: 0.3203228963771388, Val Loss: 0.33774927258491516
+EarlyStopping counter: 5 out of 10
+Epoch: 13, Train Loss: 0.3027701256314074, Val Loss: 0.39526113867759705
+EarlyStopping counter: 6 out of 10
+Epoch: 14, Train Loss: 0.28493531553106893, Val Loss: 0.3444749116897583
+EarlyStopping counter: 7 out of 10
+Epoch: 15, Train Loss: 0.2697197419525108, Val Loss: 0.3730393648147583
+EarlyStopping counter: 8 out of 10
+Epoch: 16, Train Loss: 0.2449817058278137, Val Loss: 0.37402287125587463
+EarlyStopping counter: 9 out of 10
+Epoch: 17, Train Loss: 0.22625070053819502, Val Loss: 0.4349547326564789
+EarlyStopping counter: 10 out of 10
+Early stopping
+Test Loss: 0.39199763536453247
+{'0': {'precision': 0.9427312775330396, 'recall': 0.8286544046466602, 'f1-score': 0.8820195775373518, 'support': 1033}, '1': {'precision': 0.3917525773195876, 'recall': 0.6867469879518072, 'f1-score': 0.4989059080962801, 'support': 166}, 'accuracy': 0.8090075062552127, 'macro avg': {'precision': 0.6672419274263136, 'recall': 0.7577006962992336, 'f1-score': 0.690462742816816, 'support': 1199}, 'weighted avg': {'precision': 0.8664489887628701, 'recall': 0.8090075062552127, 'f1-score': 0.828977985271115, 'support': 1199}}
+[[856 177]
+ [ 52 114]]
+Accuracy = 0.8090075062552127
+AUPRC = 0.5227055263179882
+AUROC = 0.8651722086798307
