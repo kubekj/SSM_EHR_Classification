@@ -11,7 +11,7 @@ def load_split_results(base_dir: str, split_folder_pattern: str = "split_*") -> 
     results = []
     pattern = os.path.join(base_dir, split_folder_pattern)
     for folder in glob.glob(pattern):
-        result_path = os.path.join(folder, "test_result.json")
+        result_path = os.path.join(folder, "test_results.json")
         if os.path.exists(result_path):
             with open(result_path, 'r') as f:
                 results.append(json.load(f))

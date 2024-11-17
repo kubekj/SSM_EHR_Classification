@@ -1,0 +1,10 @@
+{
+    "mean_loss": 0.4024,
+    "mean_accuracy": 0.801,
+    "mean_auprc": 0.5339,
+    "mean_auroc": 0.8585,
+    "std_loss": 0.0458,
+    "std_accuracy": 0.0269,
+    "std_auprc": 0.0159,
+    "std_auroc": 0.0101
+}
