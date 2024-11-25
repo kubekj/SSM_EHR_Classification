@@ -1,3 +1,8 @@
+"""
+This model is a simple implementation of the Deep Structured Semantic Model (DSSM) for sequence classification.
+Made for educational purposes (Deep Learning course @ DTU), it is not yet optimized for performance.
+"""
+
 import torch
 import torch.nn as nn
 

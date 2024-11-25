@@ -1,4 +1,5 @@
 import json
+import itertools
 import torch
 import numpy as np
 import torch.nn.functional as F
@@ -297,7 +298,6 @@ def train_cross_validation(model_class, model_params, training_params, device, s
         with open(log_path, 'w') as f:
             json.dump(training_history, f, indent=4)
 
-        # Print split results
         print(f"\nSplit {split} Test Metrics:")
         for k, v in split_metrics.items():
             print(f"{k}: {v:.4f}")
@@ -339,47 +339,66 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
     best_params = {}
     results = []
 
-    # Generate parameter combinations (consider using itertools.product for full grid)
-    # Here showing a simplified example focusing on key parameters
-    for hidden_size in param_grid['hidden_size']:
-        for lr in param_grid['learning_rate']:
-            for dropout in param_grid['dropout_rate']:
-                model_params = base_model_params.copy()
-                training_params = base_training_params.copy()
+    # Generate all parameter combinations using itertools.product
+    param_names = ['hidden_size', 'learning_rate', 'dropout_rate']
+    param_values = [param_grid[name] for name in param_names]
+    param_combinations = list(itertools.product(*param_values))
 
-                model_params['hidden_size'] = hidden_size
-                model_params['dropout_rate'] = dropout
-                training_params['learning_rate'] = lr
+    total_combinations = len(param_combinations)
+    print(f"Total parameter combinations to try: {total_combinations}")
 
-                print(f"\nTrying parameters: hidden_size={hidden_size}, lr={lr}, dropout={dropout}")
+    for i, (hidden_size, lr, dropout) in enumerate(param_combinations, 1):
+        model_params = base_model_params.copy()
+        training_params = base_training_params.copy()
 
-                # Train model with these parameters
-                metrics, _ = train_cross_validation(
-                    model_class=model_class,
-                    model_params=model_params,
-                    training_params=training_params,
-                    device=device,
-                    split_number=1
-                )
+        model_params['hidden_size'] = hidden_size
+        model_params['dropout_rate'] = dropout
+        training_params['learning_rate'] = lr
 
-                # Save results
-                results.append({
-                    'params': {
-                        'hidden_size': hidden_size,
-                        'learning_rate': lr,
-                        'dropout_rate': dropout
-                    },
-                    'metrics': metrics
-                })
+        print(f"\nTrying combination {i}/{total_combinations}:")
+        print(f"hidden_size={hidden_size}, lr={lr}, dropout={dropout}")
 
-                # Update best parameters if improved
-                if metrics['mean_auroc'] > best_metrics['auroc']:
-                    best_metrics = metrics
-                    best_params = {
-                        'hidden_size': hidden_size,
-                        'learning_rate': lr,
-                        'dropout_rate': dropout
-                    }
+        # Train model with these parameters
+        metrics, _ = train_cross_validation(
+            model_class=model_class,
+            model_params=model_params,
+            training_params=training_params,
+            device=device,
+            split_number=1
+        )
+
+        # Save results
+        results.append({
+            'params': {
+                'hidden_size': hidden_size,
+                'learning_rate': lr,
+                'dropout_rate': dropout
+            },
+            'metrics': metrics
+        })
+
+        # Update best parameters if improved
+        if metrics['auroc'] > best_metrics['auroc']:  # Changed from mean_auroc since we're using single split
+            best_metrics = metrics
+            best_params = {
+                'hidden_size': hidden_size,
+                'learning_rate': lr,
+                'dropout_rate': dropout
+            }
+            print("\nNew best parameters found!")
+            print(f"New best AUROC: {best_metrics['auroc']:.4f}")
+
+        # Save intermediate results to avoid losing progress
+        save_path = 'grid_search_intermediate_results.json'
+        intermediate_results = {
+            'completed_combinations': i,
+            'total_combinations': total_combinations,
+            'current_best_params': best_params,
+            'current_best_metrics': best_metrics,
+            'all_results': results
+        }
+        with open(save_path, 'w') as f:
+            json.dump(intermediate_results, f, indent=4)
 
     return best_params, best_metrics, results
 
