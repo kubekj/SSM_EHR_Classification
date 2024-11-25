@@ -246,12 +246,19 @@ def calculate_final_metrics(splits_metrics):
     return final_metrics
 
 
-def train_cross_validation(model_class, model_params, training_params, device):
-    """Run full cross-validation training pipeline"""
+def train_cross_validation(model_class, model_params, training_params, device, split_number=None):
+    """Run training pipeline, either for all splits or a specific split
+
+    Args:
+        model_class: The model class to train
+        model_params: Model parameters dictionary
+        training_params: Training parameters dictionary
+        device: torch device to use
+        split_number: Optional; If provided, trains only on that split (1-5)
+    """
     log_path = setup_logging()
     splits_metrics = []
 
-    # Initialize training history
     training_history = {
         'model_params': model_params,
         'training_params': training_params,
@@ -259,8 +266,16 @@ def train_cross_validation(model_class, model_params, training_params, device):
         'final_metrics': None
     }
 
-    for split in range(1, 6):
-        print(f"\n=== Training on Split {split}/5 ===")
+    # Determine which splits to run
+    if split_number is not None:
+        if not 1 <= split_number <= 5:
+            raise ValueError("split_number must be between 1 and 5")
+        splits_to_run = [split_number]
+    else:
+        splits_to_run = range(1, 6)
+
+    for split in splits_to_run:
+        print(f"\n=== Training on Split {split}/{len(splits_to_run)} ===")
 
         # Initialize training components for this split
         model, dataloaders, criterion, optimizer = initialize_training(
@@ -288,7 +303,7 @@ def train_cross_validation(model_class, model_params, training_params, device):
             print(f"{k}: {v:.4f}")
 
     # Calculate and save final metrics
-    final_metrics = calculate_final_metrics(splits_metrics)
+    final_metrics = calculate_final_metrics(splits_metrics) if len(splits_metrics) > 1 else splits_metrics[0]
     training_history['final_metrics'] = final_metrics
 
     with open(log_path, 'w') as f:
@@ -297,7 +312,79 @@ def train_cross_validation(model_class, model_params, training_params, device):
     return final_metrics, splits_metrics
 
 
-def main():
+def define_parameter_grid():
+    return {
+        # Model parameters
+        'hidden_size': [32, 64, 128, 256],  # Capacity of the model
+        'num_layers': [1, 2, 3],  # Depth of LSTM
+        'dropout_rate': [0.1, 0.2, 0.3, 0.4],  # Regularization strength
+
+        # Training parameters
+        'learning_rate': [0.01, 0.001, 0.0001],  # Learning rate range
+        'batch_size': [16, 32, 64],  # Batch size options
+
+        # Class weights (given high class imbalance)
+        'class_weights': [
+            [1.0, 7.143],  # Original weights
+            [1.163, 7.143],  # Current weights
+            [1.0, 6.0],  # Alternative weights
+            None  # No weighting
+        ]
+    }
+
+
+def train_with_grid_search(model_class, base_model_params, base_training_params, device):
+    param_grid = define_parameter_grid()
+    best_metrics = {'auroc': 0}
+    best_params = {}
+    results = []
+
+    # Generate parameter combinations (consider using itertools.product for full grid)
+    # Here showing a simplified example focusing on key parameters
+    for hidden_size in param_grid['hidden_size']:
+        for lr in param_grid['learning_rate']:
+            for dropout in param_grid['dropout_rate']:
+                model_params = base_model_params.copy()
+                training_params = base_training_params.copy()
+
+                model_params['hidden_size'] = hidden_size
+                model_params['dropout_rate'] = dropout
+                training_params['learning_rate'] = lr
+
+                print(f"\nTrying parameters: hidden_size={hidden_size}, lr={lr}, dropout={dropout}")
+
+                # Train model with these parameters
+                metrics, _ = train_cross_validation(
+                    model_class=model_class,
+                    model_params=model_params,
+                    training_params=training_params,
+                    device=device,
+                    split_number=1
+                )
+
+                # Save results
+                results.append({
+                    'params': {
+                        'hidden_size': hidden_size,
+                        'learning_rate': lr,
+                        'dropout_rate': dropout
+                    },
+                    'metrics': metrics
+                })
+
+                # Update best parameters if improved
+                if metrics['mean_auroc'] > best_metrics['auroc']:
+                    best_metrics = metrics
+                    best_params = {
+                        'hidden_size': hidden_size,
+                        'learning_rate': lr,
+                        'dropout_rate': dropout
+                    }
+
+    return best_params, best_metrics, results
+
+
+def cross_validation():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
@@ -347,5 +434,52 @@ def main():
             print(f"{base_metric}: {value:.4f} ± {std_value:.4f}")
 
 
+def grid_search():
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f"Using device: {device}")
+
+    base_model_params = {
+        'input_size': 37,
+        'static_input_size': 8,
+        'num_classes': 2,
+        'num_layers': 2,
+        'bidirectional': True
+    }
+
+    base_training_params = {
+        'num_epochs': 100,
+        'class_weights': [1.163, 7.143],
+        'loader_params': {
+            'batch_size': 32,
+            'shuffle': True
+        },
+        'early_stopping': {
+            'patience': 10,
+            'min_delta': 0,
+            'verbose': True
+        }
+    }
+
+    best_params, best_metrics, all_results = train_with_grid_search(
+        DSSM,
+        base_model_params,
+        base_training_params,
+        device
+    )
+
+    results_path = Path('grid_search_results.json')
+    with open(results_path, 'w') as f:
+        json.dump({
+            'best_params': best_params,
+            'best_metrics': best_metrics,
+            'all_results': all_results
+        }, f, indent=4)
+
+    print("\nBest parameters found:")
+    print(json.dumps(best_params, indent=2))
+    print("\nBest metrics achieved:")
+    print(json.dumps(best_metrics, indent=2))
+
+
 if __name__ == "__main__":
-    main()
+    grid_search()
