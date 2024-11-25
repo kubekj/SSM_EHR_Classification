@@ -2,10 +2,10 @@ import torch
 import torch.nn as nn
 
 
-class ImprovedDSSM(nn.Module):
+class DSSM(nn.Module):
     def __init__(self, input_size, hidden_size, static_input_size, num_classes,
                  num_layers=2, dropout_rate=0.2, bidirectional=True):
-        super(ImprovedDSSM, self).__init__()
+        super(DSSM, self).__init__()
 
         self.hidden_size = hidden_size
         self.num_layers = num_layers

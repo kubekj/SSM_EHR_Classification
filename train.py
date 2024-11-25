@@ -11,7 +11,7 @@ from torch import nn
 from torch.nn.utils.rnn import pad_sequence
 from torch.utils.data import DataLoader, Dataset
 
-from models.dssm import ImprovedDSSM
+from models.dssm import DSSM
 
 
 class PhysionetDataset(Dataset):
@@ -332,7 +332,7 @@ def main():
     }
 
     final_metrics, splits_metrics = train_cross_validation(
-        model_class=ImprovedDSSM,
+        model_class=DSSM,
         model_params=model_params,
         training_params=training_params,
         device=device
