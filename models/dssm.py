@@ -12,7 +12,6 @@ class ImprovedDSSM(nn.Module):
         self.bidirectional = bidirectional
         self.num_directions = 2 if bidirectional else 1
 
-        # Components initialization
         self.temporal_encoder = TemporalEncoder(
             input_size, hidden_size, num_layers, dropout_rate, bidirectional
         )
@@ -34,14 +33,14 @@ class ImprovedDSSM(nn.Module):
         static_repr = self.static_encoder(static_data)  # Shape: [batch, hidden]
 
         # Get final temporal representation (use the last relevant timestep for each sequence)
-        temporal_repr = temporal_repr[torch.arange(batch_size), seq_lengths - 1]
+        temporal_repr = temporal_repr[torch.arange(batch_size), seq_lengths - 1]  # Shape: [batch, hidden]
 
         # Apply state transition
-        state = self.state_transition(temporal_repr)
+        state = self.state_transition(temporal_repr)  # Shape: [batch, hidden]
 
         # Combine representations and classify
-        combined = torch.cat([state, static_repr], dim=1)
-        output = self.classifier(combined)
+        combined = torch.cat([state, static_repr], dim=1)  # Shape: [batch, hidden * (num_directions + 1)]
+        output = self.classifier(combined)  # Shape: [batch, num_classes]
 
         return output
 
@@ -82,7 +81,8 @@ class TemporalEncoder(nn.Module):
 
         return attention_output
 
-    def _create_attention_mask(self, tensor, seq_lengths):
+    @staticmethod
+    def _create_attention_mask(tensor, seq_lengths):
         return torch.arange(tensor.size(1))[None, :] >= seq_lengths[:, None]
 
     def _apply_attention(self, lstm_output, mask):

@@ -63,7 +63,7 @@ class MetricsTracker:
 
 
 class EarlyStopping:
-    def __init__(self, patience=7, min_delta=0, verbose=False):
+    def __init__(self, patience=10, min_delta=0, verbose=False):
         self.patience = patience
         self.min_delta = min_delta
         self.verbose = verbose
@@ -325,7 +325,7 @@ def main():
             'shuffle': True
         },
         'early_stopping': {
-            'patience': 7,
+            'patience': 10,
             'min_delta': 0,
             'verbose': True
         }
