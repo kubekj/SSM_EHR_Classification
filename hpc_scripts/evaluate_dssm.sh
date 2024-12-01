@@ -2,7 +2,7 @@
 #BSUB -J dssm_train
 #BSUB -o hpc_scripts/dssm_train.out
 #BSUB -e hpc_scripts/dssm_train.err
-#BSUB -q hpc
+#BSUB -q gpuv-100
 #BSUB -n 4
 #BSUB -gpu "num=1:mode=exclusive_process"
 #BSUB -R "span[hosts=1]"
@@ -34,7 +34,7 @@ pip list
 nvidia-smi
 
 echo "Starting training..."
-python train.py
+python random_search.py
 
 # Deactivate virtual environment
 deactivate
