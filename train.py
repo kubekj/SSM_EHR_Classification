@@ -328,7 +328,7 @@ def define_parameter_grid():
             [1.0, 7.143],  # Original weights
             [1.163, 7.143],  # Current weights
             [1.0, 6.0],  # Alternative weights
-            None  # No weighting
+            [1.0, 5.0]  # Alternative weights #2
         ]
     }
 
