@@ -26,4 +26,8 @@ pip list
 nvidia-smi
 
 echo "Starting training..."
+<<<<<<< HEAD
 python random_search.py
+=======
+python random_search.py
+>>>>>>> b2ff845106bc7820d534eba9a67a5b3f1e5fb7c9
