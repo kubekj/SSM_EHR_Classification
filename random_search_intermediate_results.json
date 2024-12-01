@@ -1,0 +1,44 @@
+{
+    "completed_combinations": 1,
+    "total_combinations": 50,
+    "current_best_params": {
+        "hidden_size": 128,
+        "num_layers": 3,
+        "dropout_rate": 0.4,
+        "learning_rate": 0.001,
+        "batch_size": 16,
+        "class_weights": [
+            1.163,
+            7.143
+        ],
+        "bidirectional": true
+    },
+    "current_best_metrics": {
+        "loss": 0.6808204195020197,
+        "accuracy": 0.8315262718932444,
+        "auprc": 0.4290338213765124,
+        "auroc": 0.8238901403963865
+    },
+    "all_results": [
+        {
+            "params": {
+                "hidden_size": 128,
+                "num_layers": 3,
+                "dropout_rate": 0.4,
+                "learning_rate": 0.001,
+                "batch_size": 16,
+                "class_weights": [
+                    1.163,
+                    7.143
+                ],
+                "bidirectional": true
+            },
+            "metrics": {
+                "loss": 0.6808204195020197,
+                "accuracy": 0.8315262718932444,
+                "auprc": 0.4290338213765124,
+                "auroc": 0.8238901403963865
+            }
+        }
+    ]
+}
