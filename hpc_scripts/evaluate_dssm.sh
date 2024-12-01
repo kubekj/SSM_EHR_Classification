@@ -13,17 +13,17 @@
 #BSUB -N
 
 # Load required modules
-module load python3/3.9.19
-module load cuda/11.8
-module load cudnn/v8.8.0-prod-cuda-11.X
+# module load python3/3.9.19
+# module load cuda/11.8
+# module load cudnn/v8.8.0-prod-cuda-11.X
 
-echo "Installing requirements..."
-pip install --no-cache-dir -r requirements.txt
+# echo "Installing requirements..."
+# pip install --no-cache-dir -r requirements.txt
 
 # Print environment information
-python --version
-pip list
-nvidia-smi
+# python --version
+# pip list
+# nvidia-smi
 
 echo "Starting training..."
 python random_search.py
