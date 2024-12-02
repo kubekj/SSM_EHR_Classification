@@ -155,7 +155,7 @@ def random_search():
         n_iter=50  # You can adjust this number as needed
     )
 
-    results_path = Path('random_search_results.json')
+    results_path = Path('../baseline_outputs/dssm_output/random_search_results.json')
     with open(results_path, 'w') as f:
         json.dump({
             'best_params': best_params,
