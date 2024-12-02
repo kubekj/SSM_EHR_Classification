@@ -197,17 +197,14 @@ def train_split(split, model, dataloaders, criterion, optimizer, training_params
     best_model_state = None
 
     for epoch in range(training_params['num_epochs']):
-        # Training phase
         train_metrics = train_epoch(
             model, dataloaders['train'], optimizer, criterion, device, tracker
         )
 
-        # Validation phase
         val_metrics = evaluate_model(
             model, dataloaders['val'], criterion, device, tracker
         )
 
-        # Log progress
         print(f"\nSplit {split}, Epoch {epoch + 1}/{training_params['num_epochs']}")
         print(f"Train Loss: {train_metrics['loss']:.4f}, Val Loss: {val_metrics['loss']:.4f}")
         print(f"Val AUROC: {val_metrics['auroc']:.4f}, Val AUPRC: {val_metrics['auprc']:.4f}")
@@ -425,7 +422,7 @@ def cross_validation():
     training_params = {
         'num_epochs': 100,
         'learning_rate': 0.001,
-        'class_weights': [1, 6],
+        'class_weights': [1.0, 6.0],
         'loader_params': {
             'batch_size': 32,
             'shuffle': True
