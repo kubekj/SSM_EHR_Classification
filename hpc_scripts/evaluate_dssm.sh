@@ -1,4 +1,3 @@
-
 #!/bin/sh
 #BSUB -J dssm_train
 #BSUB -o hpc_scripts/dssm_train.out
@@ -26,4 +25,4 @@ pip list
 nvidia-smi
 
 echo "Starting training..."
-python random_search.py
+python train.py

@@ -453,5 +453,52 @@ def cross_validation():
             print(f"{base_metric}: {value:.4f} ± {std_value:.4f}")
 
 
+def grid_search():
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f"Using device: {device}")
+
+    base_model_params = {
+        'input_size': 37,
+        'static_input_size': 8,
+        'num_classes': 2,
+        'num_layers': 2,
+        'bidirectional': True
+    }
+
+    base_training_params = {
+        'num_epochs': 100,
+        'class_weights': [1.163, 7.143],
+        'loader_params': {
+            'batch_size': 32,
+            'shuffle': True
+        },
+        'early_stopping': {
+            'patience': 10,
+            'min_delta': 0,
+            'verbose': True
+        }
+    }
+
+    best_params, best_metrics, all_results = train_with_grid_search(
+        DSSM,
+        base_model_params,
+        base_training_params,
+        device
+    )
+
+    results_path = Path('grid_search_results.json')
+    with open(results_path, 'w') as f:
+        json.dump({
+            'best_params': best_params,
+            'best_metrics': best_metrics,
+            'all_results': all_results
+        }, f, indent=4)
+
+    print("\nBest parameters found:")
+    print(json.dumps(best_params, indent=2))
+    print("\nBest metrics achieved:")
+    print(json.dumps(best_metrics, indent=2))
+
+
 if __name__ == "__main__":
     cross_validation()
