@@ -1,0 +1,35 @@
+Traceback (most recent call last):
+  File "/dtu/blackhole/10/203216/SSM_EHR_Classification/random_search.py", line 173, in <module>
+    random_search()
+  File "/dtu/blackhole/10/203216/SSM_EHR_Classification/random_search.py", line 150, in random_search
+    best_params, best_metrics, all_results = train_with_randomized_search_cv(
+  File "/dtu/blackhole/10/203216/SSM_EHR_Classification/random_search.py", line 91, in train_with_randomized_search_cv
+    metrics, _ = train_model(
+  File "/dtu/blackhole/10/203216/SSM_EHR_Classification/random_search.py", line 31, in train_model
+    split_metrics = train_split(
+  File "/dtu/blackhole/10/203216/SSM_EHR_Classification/train.py", line 201, in train_split
+    train_metrics = train_epoch(
+  File "/dtu/blackhole/10/203216/SSM_EHR_Classification/train.py", line 94, in train_epoch
+    for batch in loader:
+  File "/zhome/e8/8/203216/.local/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 631, in __next__
+    data = self._next_data()
+  File "/zhome/e8/8/203216/.local/lib/python3.9/site-packages/torch/utils/data/dataloader.py", line 675, in _next_data
+    data = self._dataset_fetcher.fetch(index)  # may raise StopIteration
+  File "/zhome/e8/8/203216/.local/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 51, in fetch
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/zhome/e8/8/203216/.local/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py", line 51, in <listcomp>
+    data = [self.dataset[idx] for idx in possibly_batched_index]
+  File "/dtu/blackhole/10/203216/SSM_EHR_Classification/train.py", line 28, in __getitem__
+    torch.tensor(record['ts_values'], dtype=torch.float32),
+KeyboardInterrupt
+Loaded dependency [python3/3.9.19]: sqlite3/3.46.0
+Loaded dependency [python3/3.9.19]: gcc/12.4.0-binutils-2.42
+Loaded module: python3/3.9.19
+
+Loading python3/3.9.19
+  Loading requirement: sqlite3/3.46.0 gcc/12.4.0-binutils-2.42
+Loaded module: cuda/11.8
+Loaded module: cudnn/v8.8.0-prod-cuda-11.X
+
+[notice] A new release of pip is available: 24.1.2 -> 24.3.1
+[notice] To update, run: pip install --upgrade pip
