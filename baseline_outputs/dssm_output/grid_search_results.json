@@ -1,0 +1,639 @@
+{
+    "best_params": {
+        "hidden_size": 32,
+        "learning_rate": 0.0001,
+        "dropout_rate": 0.3
+    },
+    "best_metrics": {
+        "loss": 0.4716489870564156,
+        "accuracy": 0.7823185988323603,
+        "auprc": 0.5119349868986751,
+        "auroc": 0.8583464172753545
+    },
+    "all_results": [
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.6675568054476015,
+                "accuracy": 0.3694745621351126,
+                "auprc": 0.17694465021595382,
+                "auroc": 0.6062700525633149
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.6388176444473617,
+                "accuracy": 0.5221017514595496,
+                "auprc": 0.2031883965955407,
+                "auroc": 0.6599967005711425
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.6133613921484419,
+                "accuracy": 0.6063386155129274,
+                "auprc": 0.26150386245043833,
+                "auroc": 0.7302660022299587
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.663233033063712,
+                "accuracy": 0.36447039199332776,
+                "auprc": 0.18358346008060145,
+                "auroc": 0.6150249163765444
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.6758012718911763,
+                "accuracy": 0.7998331943286072,
+                "auprc": 0.465331469884654,
+                "auroc": 0.8374974400983003
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.5352301081336469,
+                "accuracy": 0.8090075062552127,
+                "auprc": 0.48589463069002786,
+                "auroc": 0.8578515029467312
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.5061156921728737,
+                "accuracy": 0.7889908256880734,
+                "auprc": 0.47382326872959607,
+                "auroc": 0.8439370150408446
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.530723866519578,
+                "accuracy": 0.7848206839032527,
+                "auprc": 0.5001308825840973,
+                "auroc": 0.8493526293034792
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.4816416771437746,
+                "accuracy": 0.7597998331943286,
+                "auprc": 0.5053364178988221,
+                "auroc": 0.8539035656586342
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.4857741491907929,
+                "accuracy": 0.7831526271893244,
+                "auprc": 0.49012265128011623,
+                "auroc": 0.8552802239060687
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.4716489870564156,
+                "accuracy": 0.7823185988323603,
+                "auprc": 0.5119349868986751,
+                "auroc": 0.8583464172753545
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 32,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.47617758861474935,
+                "accuracy": 0.773978315262719,
+                "auprc": 0.5137997181101074,
+                "auroc": 0.8546658474981226
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.6921863221346686,
+                "accuracy": 0.8573811509591326,
+                "auprc": 0.14261884904086738,
+                "auroc": 0.5
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.6924854275880007,
+                "accuracy": 0.8573811509591326,
+                "auprc": 0.14261884904086738,
+                "auroc": 0.5
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.7511551828559385,
+                "accuracy": 0.48874061718098416,
+                "auprc": 0.19647347367393211,
+                "auroc": 0.6486734020524724
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.686294033688441,
+                "accuracy": 0.8573811509591326,
+                "auprc": 0.1493032473981482,
+                "auroc": 0.5259460258948279
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.5513973964861376,
+                "accuracy": 0.8090075062552127,
+                "auprc": 0.48961913228757137,
+                "auroc": 0.8469520103761348
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.6689246905854188,
+                "accuracy": 0.8165137614678899,
+                "auprc": 0.5024934779284275,
+                "auroc": 0.8478565089767219
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.5038234911629118,
+                "accuracy": 0.7998331943286072,
+                "auprc": 0.49017825241889296,
+                "auroc": 0.8530502650920428
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.5117648527138028,
+                "accuracy": 0.7814845704753962,
+                "auprc": 0.5038589194210542,
+                "auroc": 0.853806858261087
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.51606203661649,
+                "accuracy": 0.7856547122602169,
+                "auprc": 0.48180795932654596,
+                "auroc": 0.8446253441645619
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.503355605662913,
+                "accuracy": 0.8065054211843202,
+                "auprc": 0.4929059270313276,
+                "auroc": 0.8519352856850297
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.4711246264786199,
+                "accuracy": 0.7456213511259383,
+                "auprc": 0.514688175873924,
+                "auroc": 0.8554224406671671
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 64,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.4804917646011181,
+                "accuracy": 0.7581317764804003,
+                "auprc": 0.49495503419223547,
+                "auroc": 0.8543700366350377
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.7214049165501407,
+                "accuracy": 0.3886572143452877,
+                "auprc": 0.18030435884075785,
+                "auroc": 0.616381664277425
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.6927357709735905,
+                "accuracy": 0.8573811509591326,
+                "auprc": 0.14261884904086738,
+                "auroc": 0.5
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.7790759251056063,
+                "accuracy": 0.43452877397831524,
+                "auprc": 0.18215279344819446,
+                "auroc": 0.6203040025485244
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.6924026311189557,
+                "accuracy": 0.8573811509591326,
+                "auprc": 0.14261884904086738,
+                "auroc": 0.5
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.5211009577823938,
+                "accuracy": 0.7848206839032527,
+                "auprc": 0.4609634599425136,
+                "auroc": 0.8438573736546294
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.5031772849458371,
+                "accuracy": 0.7531276063386155,
+                "auprc": 0.4805784881683662,
+                "auroc": 0.8536475754886568
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.5160315873426035,
+                "accuracy": 0.7331109257714762,
+                "auprc": 0.4570729775806677,
+                "auroc": 0.839863927002981
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.5465439470536119,
+                "accuracy": 0.79232693911593,
+                "auprc": 0.5137815328747417,
+                "auroc": 0.8514119280041869
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.5099354233216802,
+                "accuracy": 0.7939949958298582,
+                "auprc": 0.48176711429074326,
+                "auroc": 0.8484481307028922
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.5212629253015209,
+                "accuracy": 0.7798165137614679,
+                "auprc": 0.4572050418314959,
+                "auroc": 0.8479759710560448
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.49867846967778273,
+                "accuracy": 0.7631359466221852,
+                "auprc": 0.4645542481325987,
+                "auroc": 0.8447789382665484
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 128,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.4990599539699507,
+                "accuracy": 0.7406171809841534,
+                "auprc": 0.48247324347810844,
+                "auroc": 0.8459564930484447
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.6928875675988854,
+                "accuracy": 0.8573811509591326,
+                "auprc": 0.14261884904086738,
+                "auroc": 0.5
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.6934188478583589,
+                "accuracy": 0.14261884904086738,
+                "auprc": 0.14261884904086738,
+                "auroc": 0.5
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.6927180712276741,
+                "accuracy": 0.8573811509591326,
+                "auprc": 0.14261884904086738,
+                "auroc": 0.5
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.01,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.6931657032533125,
+                "accuracy": 0.8573811509591326,
+                "auprc": 0.14261884904086738,
+                "auroc": 0.5
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.6408452630241878,
+                "accuracy": 0.5596330275229358,
+                "auprc": 0.2510676360021285,
+                "auroc": 0.6931787152706669
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.6099887165156278,
+                "accuracy": 0.628023352793995,
+                "auprc": 0.34968469314394296,
+                "auroc": 0.7388160739072064
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.5540364589215916,
+                "accuracy": 0.7247706422018348,
+                "auprc": 0.44543083780756987,
+                "auroc": 0.837520194780076
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.001,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.6329879461973285,
+                "accuracy": 0.5112593828190158,
+                "auprc": 0.25008054446013894,
+                "auroc": 0.6972034496097572
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.1
+            },
+            "metrics": {
+                "loss": 0.5307305980414724,
+                "accuracy": 0.7848206839032527,
+                "auprc": 0.45223306128240764,
+                "auroc": 0.8386067308348693
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.2
+            },
+            "metrics": {
+                "loss": 0.5165594477172292,
+                "accuracy": 0.7898248540450375,
+                "auprc": 0.46773937414761646,
+                "auroc": 0.8432259312353517
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.3
+            },
+            "metrics": {
+                "loss": 0.5412594441377291,
+                "accuracy": 0.7689741451209341,
+                "auprc": 0.4796552545533094,
+                "auroc": 0.8401938698887296
+            }
+        },
+        {
+            "params": {
+                "hidden_size": 256,
+                "learning_rate": 0.0001,
+                "dropout_rate": 0.4
+            },
+            "metrics": {
+                "loss": 0.5090916711554316,
+                "accuracy": 0.786488740617181,
+                "auprc": 0.46722694492647354,
+                "auroc": 0.8454786447311534
+            }
+        }
+    ]
+}

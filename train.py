@@ -328,7 +328,7 @@ def define_parameter_grid():
             [1.0, 7.143],  # Original weights
             [1.163, 7.143],  # Current weights
             [1.0, 6.0],  # Alternative weights
-            None  # No weighting
+            [1.0, 5.0]  # Alternative weights #2
         ]
     }
 
@@ -417,15 +417,15 @@ def cross_validation():
         'hidden_size': 64,
         'static_input_size': 8,
         'num_classes': 2,
-        'num_layers': 2,
-        'dropout_rate': 0.2,
-        'bidirectional': True
+        'num_layers': 3,
+        'dropout_rate': 0.1,
+        'bidirectional': False
     }
 
     training_params = {
         'num_epochs': 100,
         'learning_rate': 0.001,
-        'class_weights': [1.163, 7.143],
+        'class_weights': [1, 6],
         'loader_params': {
             'batch_size': 32,
             'shuffle': True
@@ -501,4 +501,4 @@ def grid_search():
 
 
 if __name__ == "__main__":
-    grid_search()
+    cross_validation()
