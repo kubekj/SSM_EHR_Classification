@@ -316,15 +316,6 @@ def calculate_final_metrics(splits_metrics):
 
 def train_cross_validation(model_class, model_params, training_params, device, split_number=None):
     """Run training pipeline with wandb logging"""
-    wandb.init(
-        project="DSSM-Mortality",
-        name="cross_validation",
-        config={
-            "model_params": model_params,
-            "training_params": training_params,
-        }
-    )
-
     log_path = setup_logging()
     splits_metrics = []
 
@@ -338,6 +329,18 @@ def train_cross_validation(model_class, model_params, training_params, device, s
     splits_to_run = [split_number] if split_number is not None else range(1, 6)
 
     for split in splits_to_run:
+        # Initialize wandb for each split
+        wandb.init(
+            project="DSSM-Mortality",
+            name=f"split_{split}",
+            config={
+                "split": split,
+                "model_params": model_params,
+                "training_params": training_params,
+            },
+            reinit=True  # Allow multiple runs in same script
+        )
+
         model, dataloaders, criterion, optimizer = initialize_training(
             model_class, model_params, training_params, split, device
         )
@@ -357,9 +360,29 @@ def train_cross_validation(model_class, model_params, training_params, device, s
         with open(log_path, 'w') as f:
             json.dump(training_history, f, indent=4)
 
+        # Log metrics for this split
+        wandb.log({
+            f"split_{split}/final_loss": split_metrics['loss'],
+            f"split_{split}/final_accuracy": split_metrics['accuracy'],
+            f"split_{split}/final_auprc": split_metrics['auprc'],
+            f"split_{split}/final_auroc": split_metrics['auroc']
+        })
+
+        wandb.finish()  # Close this split's run
+
     # Calculate and save final metrics
     final_metrics = calculate_final_metrics(splits_metrics)
     training_history['final_metrics'] = final_metrics
+
+    # Start a final summary run
+    wandb.init(
+        project="DSSM-Mortality",
+        name="cross_validation_summary",
+        config={
+            "model_params": model_params,
+            "training_params": training_params,
+        }
+    )
 
     # Log final cross-validation metrics
     wandb.log({
@@ -373,8 +396,7 @@ def train_cross_validation(model_class, model_params, training_params, device, s
         "final/std_auroc": final_metrics['std_auroc']
     })
 
-    # Close wandb
-    wandb.finish()
+    wandb.finish()  # Close the summary run
 
     return final_metrics, splits_metrics
 
@@ -418,6 +440,7 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
         }
     }
 
+    # Initialize the sweep
     wandb.sweep(sweep_config, project="DSSM-Mortality")
 
     # Generate all parameter combinations
@@ -430,7 +453,7 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
 
     for i, (hidden_size, lr, dropout) in enumerate(param_combinations, 1):
         # Start a new wandb run for this combination
-        wandb.init(
+        run = wandb.init(
             project="DSSM-Mortality",
             group="grid-search",
             name=f"trial_{i}",
@@ -454,66 +477,47 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
         print(f"\nTrying combination {i}/{total_combinations}:")
         print(f"hidden_size={hidden_size}, lr={lr}, dropout={dropout}")
 
-        # Train model with these parameters
-        metrics, _ = train_cross_validation(
-            model_class=model_class,
-            model_params=model_params,
-            training_params=training_params,
-            device=device,
-            split_number=1
-        )
+        try:
+            metrics, _ = train_cross_validation(
+                model_class=model_class,
+                model_params=model_params,
+                training_params=training_params,
+                device=device,
+                split_number=1
+            )
 
-        # Log metrics to wandb
-        wandb.log({
-            'test_loss': metrics['loss'],
-            'test_accuracy': metrics['accuracy'],
-            'test_auprc': metrics['auprc'],
-            'test_auroc': metrics['auroc']
-        })
+            # Save results
+            results.append({
+                'params': {
+                    'hidden_size': hidden_size,
+                    'learning_rate': lr,
+                    'dropout_rate': dropout
+                },
+                'metrics': metrics
+            })
 
-        # Save results
-        results.append({
-            'params': {
-                'hidden_size': hidden_size,
-                'learning_rate': lr,
-                'dropout_rate': dropout
-            },
-            'metrics': metrics
-        })
+            # Update best parameters if improved
+            if metrics['mean_auroc'] > best_metrics['auroc']:
+                best_metrics = metrics
+                best_params = {
+                    'hidden_size': hidden_size,
+                    'learning_rate': lr,
+                    'dropout_rate': dropout
+                }
 
-        # Update best parameters if improved
-        if metrics['auroc'] > best_metrics['auroc']:
-            best_metrics = metrics
-            best_params = {
-                'hidden_size': hidden_size,
-                'learning_rate': lr,
-                'dropout_rate': dropout
-            }
+                print("\nNew best parameters found!")
+                print(f"New best AUROC: {best_metrics['auroc']:.4f}")
 
-            # Log best model configuration
-            wandb.run.summary['best_auroc'] = metrics['auroc']
-            wandb.run.summary['best_params'] = best_params
+            # Log metrics to wandb
+            wandb.log({
+                'test_loss': metrics['mean_loss'],
+                'test_accuracy': metrics['mean_accuracy'],
+                'test_auprc': metrics['mean_auprc'],
+                'test_auroc': metrics['mean_auroc']
+            })
 
-            print("\nNew best parameters found!")
-            print(f"New best AUROC: {best_metrics['auroc']:.4f}")
-
-        # Save intermediate results
-        save_path = 'grid_search_intermediate_results.json'
-        intermediate_results = {
-            'completed_combinations': i,
-            'total_combinations': total_combinations,
-            'current_best_params': best_params,
-            'current_best_metrics': best_metrics,
-            'all_results': results
-        }
-        with open(save_path, 'w') as f:
-            json.dump(intermediate_results, f, indent=4)
-
-        # Close the wandb run
-        wandb.finish()
-
-    # Create a final summary plot
-    create_grid_search_summary(results)
+        finally:
+            wandb.finish()  # Ensure run is closed even if there's an error
 
     return best_params, best_metrics, results
 
