@@ -312,7 +312,7 @@ def train_cross_validation(model_class, model_params, training_params, device, s
 def define_parameter_grid():
     return {
         # Model parameters
-        'hidden_size': [64, 128, 256],  # Capacity of the model
+        'hidden_size': [32, 64],  # Capacity of the model
         'num_layers': [2, 3],  # Depth of LSTM
         'dropout_rate': [0.2, 0.3],   # Regularization strength
 
