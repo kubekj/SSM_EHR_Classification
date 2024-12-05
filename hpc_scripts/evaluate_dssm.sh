@@ -25,4 +25,4 @@ pip list
 nvidia-smi
 
 echo "Starting training..."
-python train.py
+python train.py --mode grid_search --wandb_project "DSSM-Mortality"
