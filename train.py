@@ -209,7 +209,7 @@ def train_split(split, model, dataloaders, criterion, optimizer, training_params
         print(f"Train Loss: {train_metrics['loss']:.4f}, Val Loss: {val_metrics['loss']:.4f}")
         print(f"Val AUROC: {val_metrics['auroc']:.4f}, Val AUPRC: {val_metrics['auprc']:.4f}")
 
-        # Save best model
+        # Save best model (we're only comparing the loss in terms of early stopping)
         if val_metrics['loss'] < best_val_loss:
             best_val_loss = val_metrics['loss']
             best_model_state = model.state_dict().copy()
