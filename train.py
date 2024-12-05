@@ -372,7 +372,7 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
         param_grid['learning_rate'],
         param_grid['batch_size'],
         param_grid['class_weights'],
-        [True, False]
+        [True]
     ]
     param_combinations = list(itertools.product(*param_values))
 
