@@ -248,14 +248,19 @@ def calculate_final_metrics(splits_metrics):
 
 
 def train_cross_validation(model_class, model_params, training_params, device, split_number=None):
-    # Initialize wandb for the entire cross-validation run
-    wandb.init(
-        project="DSSM-Mortality",
-        config={
-            "model_params": model_params,
-            "training_params": training_params,
-        }
-    )
+    try:
+        wandb.init(
+            project="DSSM-Mortality",
+            config={
+                "model_params": model_params,
+                "training_params": training_params,
+            }
+        )
+        use_wandb = True
+    except Exception as e:
+        print(f"Error initializing Weights & Biases: {str(e)}")
+        print("Continuing without W&B logging...")
+        use_wandb = False
 
     log_path = setup_logging()
     splits_metrics = []
@@ -287,13 +292,14 @@ def train_cross_validation(model_class, model_params, training_params, device, s
             'metrics': split_metrics
         })
 
-        # Log split results to wandb
-        wandb.log({
-            f"split_{split}/loss": split_metrics['loss'],
-            f"split_{split}/accuracy": split_metrics['accuracy'],
-            f"split_{split}/auprc": split_metrics['auprc'],
-            f"split_{split}/auroc": split_metrics['auroc']
-        })
+        if use_wandb:
+            # Log split results to wandb
+            wandb.log({
+                f"split_{split}/loss": split_metrics['loss'],
+                f"split_{split}/accuracy": split_metrics['accuracy'],
+                f"split_{split}/auprc": split_metrics['auprc'],
+                f"split_{split}/auroc": split_metrics['auroc']
+            })
 
         with open(log_path, 'w') as f:
             json.dump(training_history, f, indent=4)
@@ -305,22 +311,24 @@ def train_cross_validation(model_class, model_params, training_params, device, s
     final_metrics = calculate_final_metrics(splits_metrics)
     training_history['final_metrics'] = final_metrics
 
-    # Log final cross-validation metrics
-    wandb.log({
-        "final/mean_loss": final_metrics['mean_loss'],
-        "final/mean_accuracy": final_metrics['mean_accuracy'],
-        "final/mean_auprc": final_metrics['mean_auprc'],
-        "final/mean_auroc": final_metrics['mean_auroc'],
-        "final/std_loss": final_metrics['std_loss'],
-        "final/std_accuracy": final_metrics['std_accuracy'],
-        "final/std_auprc": final_metrics['std_auprc'],
-        "final/std_auroc": final_metrics['std_auroc']
-    })
+    if use_wandb:
+        # Log final cross-validation metrics
+        wandb.log({
+            "final/mean_loss": final_metrics['mean_loss'],
+            "final/mean_accuracy": final_metrics['mean_accuracy'],
+            "final/mean_auprc": final_metrics['mean_auprc'],
+            "final/mean_auroc": final_metrics['mean_auroc'],
+            "final/std_loss": final_metrics['std_loss'],
+            "final/std_accuracy": final_metrics['std_accuracy'],
+            "final/std_auprc": final_metrics['std_auprc'],
+            "final/std_auroc": final_metrics['std_auroc']
+        })
 
     with open(log_path, 'w') as f:
         json.dump(training_history, f, indent=4)
 
-    wandb.finish()
+    if use_wandb:
+        wandb.finish()
 
     return final_metrics, splits_metrics
 
@@ -455,15 +463,7 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
     return best_params, best_metrics, results
 
 
-def cross_validation():
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Using device: {device}")
-
-    torch.manual_seed(42)
-    np.random.seed(42)
-    if torch.cuda.is_available():
-        torch.cuda.manual_seed_all(42)
-
+def cross_validation(device):
     model_params = {
         'input_size': 37,
         'hidden_size': 64,
@@ -505,10 +505,7 @@ def cross_validation():
             print(f"{base_metric}: {value:.4f} ± {std_value:.4f}")
 
 
-def grid_search():
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    print(f"Using device: {device}")
-
+def grid_search(device):
     base_model_params = {
         'input_size': 37,
         'static_input_size': 8,
@@ -577,7 +574,6 @@ if __name__ == "__main__":
         torch.cuda.manual_seed_all(42)
 
     if args.mode == 'cross_validation':
-        # Setup wandb only for cross-validation
         try:
             wandb_key = get_wandb_key()
             wandb.login(key=wandb_key)
@@ -586,85 +582,6 @@ if __name__ == "__main__":
             print(f"Error logging into Weights & Biases: {str(e)}")
             print("Continuing without W&B logging...")
 
-        model_params = {
-            'input_size': 37,
-            'hidden_size': 64,
-            'static_input_size': 8,
-            'num_classes': 2,
-            'num_layers': 3,
-            'dropout_rate': 0.1,
-            'bidirectional': False
-        }
-
-        training_params = {
-            'num_epochs': 100,
-            'learning_rate': 0.001,
-            'class_weights': [1.0, 6.0],
-            'loader_params': {
-                'batch_size': 32,
-                'shuffle': True
-            },
-            'early_stopping': {
-                'patience': 10,
-                'min_delta': 0,
-                'verbose': True
-            }
-        }
-
-        final_metrics, splits_metrics = train_cross_validation(
-            model_class=DSSM,
-            model_params=model_params,
-            training_params=training_params,
-            device=device
-        )
-
-        print("\nFinal Cross-Validation Results:")
-        print("Mean ± Std:")
-        for metric, value in final_metrics.items():
-            if metric.startswith('mean_'):
-                base_metric = metric[5:]
-                std_value = final_metrics[f'std_{base_metric}']
-                print(f"{base_metric}: {value:.4f} ± {std_value:.4f}")
-
+        cross_validation(device)
     elif args.mode == 'grid_search':
-        base_model_params = {
-            'input_size': 37,
-            'static_input_size': 8,
-            'num_classes': 2,
-            'num_layers': 2,
-            'bidirectional': True
-        }
-
-        base_training_params = {
-            'num_epochs': 100,
-            'class_weights': [1.163, 7.143],
-            'loader_params': {
-                'batch_size': 32,
-                'shuffle': True
-            },
-            'early_stopping': {
-                'patience': 10,
-                'min_delta': 0,
-                'verbose': True
-            }
-        }
-
-        best_params, best_metrics, all_results = train_with_grid_search(
-            DSSM,
-            base_model_params,
-            base_training_params,
-            device
-        )
-
-        results_path = Path('grid_search_results.json')
-        with open(results_path, 'w') as f:
-            json.dump({
-                'best_params': best_params,
-                'best_metrics': best_metrics,
-                'all_results': all_results
-            }, f, indent=4)
-
-        print("\nBest parameters found:")
-        print(json.dumps(best_params, indent=2))
-        print("\nBest metrics achieved:")
-        print(json.dumps(best_metrics, indent=2))
+        grid_search(device)
