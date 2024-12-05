@@ -2,6 +2,8 @@ import wandb
 import json
 import itertools
 import torch
+import os
+import argparse
 import numpy as np
 import torch.nn.functional as F
 
@@ -647,137 +649,151 @@ def create_grid_search_summary(results):
         })
 
 
+def get_wandb_key():
+    wandb_key = os.getenv('WANDB_API_KEY')
+
+    if not wandb_key:
+        raise ValueError(
+            "WANDB_API_KEY not found in environment variables. "
+            "Please set it using: export WANDB_API_KEY='your-key' (Linux/Mac) "
+            "or set WANDB_API_KEY='your-key' (Windows)"
+        )
+
+    return wandb_key
+
+
 if __name__ == "__main__":
-    if __name__ == "__main__":
-        import argparse
-        import wandb
+    parser = argparse.ArgumentParser(description='DSSM Training')
+    parser.add_argument('--mode', type=str, choices=['cross_validation', 'grid_search'],
+                        default='cross_validation', help='Training mode')
+    parser.add_argument('--wandb_project', type=str, default="DSSM-Mortality",
+                        help='W&B project name')
+    parser.add_argument('--wandb_entity', type=str, default=None,
+                        help='W&B entity (username or team name)')
 
-        parser = argparse.ArgumentParser(description='DSSM Training')
-        parser.add_argument('--mode', type=str, choices=['cross_validation', 'grid_search'],
-                            default='cross_validation', help='Training mode')
-        parser.add_argument('--wandb_project', type=str, default="DSSM-Mortality",
-                            help='W&B project name')
-        parser.add_argument('--wandb_entity', type=str, default=None,
-                            help='W&B entity (username or team name)')
+    args = parser.parse_args()
 
-        args = parser.parse_args()
+    # Setup wandb with key from environment
+    try:
+        wandb_key = get_wandb_key()
+        wandb.login(key=wandb_key)
+        print("Successfully logged into Weights & Biases!")
+    except Exception as e:
+        print(f"Error logging into Weights & Biases: {str(e)}")
+        print("Continuing without W&B logging...")
 
-        # Setup wandb
-        wandb.login()
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+    print(f"Using device: {device}")
 
-        # Set random seeds for reproducibility
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        print(f"Using device: {device}")
+    torch.manual_seed(42)
+    np.random.seed(42)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(42)
 
-        torch.manual_seed(42)
-        np.random.seed(42)
-        if torch.cuda.is_available():
-            torch.cuda.manual_seed_all(42)
+    if args.mode == 'cross_validation':
+        model_params = {
+            'input_size': 37,
+            'hidden_size': 64,
+            'static_input_size': 8,
+            'num_classes': 2,
+            'num_layers': 3,
+            'dropout_rate': 0.1,
+            'bidirectional': False
+        }
 
-        if args.mode == 'cross_validation':
-            model_params = {
-                'input_size': 37,
-                'hidden_size': 64,
-                'static_input_size': 8,
-                'num_classes': 2,
-                'num_layers': 3,
-                'dropout_rate': 0.1,
-                'bidirectional': False
+        training_params = {
+            'num_epochs': 100,
+            'learning_rate': 0.001,
+            'class_weights': [1.0, 6.0],
+            'loader_params': {
+                'batch_size': 32,
+                'shuffle': True
+            },
+            'early_stopping': {
+                'patience': 10,
+                'min_delta': 0,
+                'verbose': True
             }
+        }
 
-            training_params = {
-                'num_epochs': 100,
-                'learning_rate': 0.001,
-                'class_weights': [1.0, 6.0],
-                'loader_params': {
-                    'batch_size': 32,
-                    'shuffle': True
-                },
-                'early_stopping': {
-                    'patience': 10,
-                    'min_delta': 0,
-                    'verbose': True
-                }
+        # Initialize wandb for cross-validation
+        wandb.init(
+            project=args.wandb_project,
+            entity=args.wandb_entity,
+            name="cross_validation",
+            config={
+                "mode": "cross_validation",
+                "model_params": model_params,
+                "training_params": training_params
             }
+        )
 
-            # Initialize wandb for cross-validation
-            wandb.init(
-                project=args.wandb_project,
-                entity=args.wandb_entity,
-                name="cross_validation",
-                config={
-                    "mode": "cross_validation",
-                    "model_params": model_params,
-                    "training_params": training_params
-                }
+        try:
+            final_metrics, splits_metrics = train_cross_validation(
+                model_class=DSSM,
+                model_params=model_params,
+                training_params=training_params,
+                device=device
             )
 
-            try:
-                final_metrics, splits_metrics = train_cross_validation(
-                    model_class=DSSM,
-                    model_params=model_params,
-                    training_params=training_params,
-                    device=device
-                )
+            print("\nFinal Cross-Validation Results:")
+            print("Mean ± Std:")
+            for metric, value in final_metrics.items():
+                if metric.startswith('mean_'):
+                    base_metric = metric[5:]
+                    std_value = final_metrics[f'std_{base_metric}']
+                    print(f"{base_metric}: {value:.4f} ± {std_value:.4f}")
 
-                print("\nFinal Cross-Validation Results:")
-                print("Mean ± Std:")
-                for metric, value in final_metrics.items():
-                    if metric.startswith('mean_'):
-                        base_metric = metric[5:]
-                        std_value = final_metrics[f'std_{base_metric}']
-                        print(f"{base_metric}: {value:.4f} ± {std_value:.4f}")
+        finally:
+            wandb.finish()
 
-            finally:
-                wandb.finish()
+    elif args.mode == 'grid_search':
+        base_model_params = {
+            'input_size': 37,
+            'static_input_size': 8,
+            'num_classes': 2,
+            'num_layers': 2,
+            'bidirectional': True
+        }
 
-        elif args.mode == 'grid_search':
-            base_model_params = {
-                'input_size': 37,
-                'static_input_size': 8,
-                'num_classes': 2,
-                'num_layers': 2,
-                'bidirectional': True
+        base_training_params = {
+            'num_epochs': 100,
+            'class_weights': [1.163, 7.143],
+            'loader_params': {
+                'batch_size': 32,
+                'shuffle': True
+            },
+            'early_stopping': {
+                'patience': 10,
+                'min_delta': 0,
+                'verbose': True
             }
+        }
 
-            base_training_params = {
-                'num_epochs': 100,
-                'class_weights': [1.163, 7.143],
-                'loader_params': {
-                    'batch_size': 32,
-                    'shuffle': True
-                },
-                'early_stopping': {
-                    'patience': 10,
-                    'min_delta': 0,
-                    'verbose': True
-                }
+        # Initialize wandb for grid search
+        wandb.init(
+            project=args.wandb_project,
+            entity=args.wandb_entity,
+            name="grid_search_main",
+            config={
+                "mode": "grid_search",
+                "base_model_params": base_model_params,
+                "base_training_params": base_training_params
             }
+        )
 
-            # Initialize wandb for grid search
-            wandb.init(
-                project=args.wandb_project,
-                entity=args.wandb_entity,
-                name="grid_search_main",
-                config={
-                    "mode": "grid_search",
-                    "base_model_params": base_model_params,
-                    "base_training_params": base_training_params
-                }
+        try:
+            best_params, best_metrics, all_results = train_with_grid_search(
+                DSSM,
+                base_model_params,
+                base_training_params,
+                device
             )
 
-            try:
-                best_params, best_metrics, all_results = train_with_grid_search(
-                    DSSM,
-                    base_model_params,
-                    base_training_params,
-                    device
-                )
+            print("\nBest parameters found:")
+            print(json.dumps(best_params, indent=2))
+            print("\nBest metrics achieved:")
+            print(json.dumps(best_metrics, indent=2))
 
-                print("\nBest parameters found:")
-                print(json.dumps(best_params, indent=2))
-                print("\nBest metrics achieved:")
-                print(json.dumps(best_metrics, indent=2))
-
-            finally:
-                wandb.finish()
+        finally:
+            wandb.finish()
