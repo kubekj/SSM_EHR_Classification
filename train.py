@@ -360,8 +360,7 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
             model_class=model_class,
             model_params=model_params,
             training_params=training_params,
-            device=device,
-            split_number=1
+            device=device
         )
 
         # Save results
