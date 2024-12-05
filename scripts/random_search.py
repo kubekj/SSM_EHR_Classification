@@ -58,7 +58,7 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
         'learning_rate': param_grid['learning_rate'],
         'batch_size': param_grid['batch_size'],
         'class_weights': param_grid['class_weights'],
-        'bidirectional': [True, False]  # Adding bidirectional to the parameter search
+        'bidirectional': [True]
     }
 
     best_metrics = {'auroc': 0}
