@@ -146,13 +146,12 @@ def random_search():
         }
     }
 
-    # Perform random search with n_iter iterations
     best_params, best_metrics, all_results = train_with_randomized_search_cv(
         DSSM,
         base_model_params,
         base_training_params,
         device,
-        n_iter=50  # You can adjust this number as needed
+        n_iter=50  # Adjust this number as needed
     )
 
     results_path = Path('../model_outputs/dssm_output/random_search_results.json')

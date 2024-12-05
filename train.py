@@ -1,3 +1,4 @@
+import wandb
 import json
 import itertools
 import torch
@@ -87,11 +88,11 @@ class EarlyStopping:
             self.counter = 0
 
 
-def train_epoch(model, loader, optimizer, criterion, device, tracker):
+def train_epoch(model, loader, optimizer, criterion, device, tracker, epoch, split):
     model.train()
     tracker.reset()
 
-    for batch in loader:
+    for batch_idx, batch in enumerate(loader):
         temporal_batch, static_batch, target_batch, seq_lengths = [
             x.to(device) for x in batch
         ]
@@ -106,10 +107,28 @@ def train_epoch(model, loader, optimizer, criterion, device, tracker):
 
         tracker.update(loss.item(), outputs, target_batch, temporal_batch.size(0))
 
-    return tracker.get_metrics()
+        # Log every 10 batch metrics to wandb
+        if batch_idx % 10 == 0:
+            wandb.log({
+                f"batch/train_loss_split_{split}": loss.item(),
+                "epoch": epoch,
+                "batch": batch_idx
+            })
+
+    metrics = tracker.get_metrics()
+
+    wandb.log({
+        f"train/loss_split_{split}": metrics['loss'],
+        f"train/accuracy_split_{split}": metrics['accuracy'],
+        f"train/auprc_split_{split}": metrics['auprc'],
+        f"train/auroc_split_{split}": metrics['auroc'],
+        "epoch": epoch
+    })
+
+    return metrics
 
 
-def evaluate_model(model, loader, criterion, device, tracker):
+def evaluate_model(model, loader, criterion, device, tracker, epoch, split, mode='val'):
     model.eval()
     tracker.reset()
 
@@ -124,7 +143,17 @@ def evaluate_model(model, loader, criterion, device, tracker):
 
             tracker.update(loss.item(), outputs, target_batch, temporal_batch.size(0))
 
-    return tracker.get_metrics()
+    metrics = tracker.get_metrics()
+
+    wandb.log({
+        f"{mode}/loss_split_{split}": metrics['loss'],
+        f"{mode}/accuracy_split_{split}": metrics['accuracy'],
+        f"{mode}/auprc_split_{split}": metrics['auprc'],
+        f"{mode}/auroc_split_{split}": metrics['auroc'],
+        "epoch": epoch
+    })
+
+    return metrics
 
 
 def create_data_loader(data, batch_size, shuffle=True):
@@ -196,13 +225,35 @@ def train_split(split, model, dataloaders, criterion, optimizer, training_params
     best_val_loss = float('inf')
     best_model_state = None
 
+    # Initialize wandb run for this split
+    run_name = f"split_{split}"
+    wandb.init(
+        project="DSSM-Mortality",
+        name=run_name,
+        config={
+            "split": split,
+            **training_params,
+            "model_config": {
+                "hidden_size": model.hidden_size,
+                "num_layers": model.num_layers,
+                "bidirectional": model.bidirectional
+            }
+        },
+        reinit=True  # Allow multiple runs in the same script
+    )
+
+    # Log model architecture
+    wandb.watch(model, log="all", log_freq=100)
+
     for epoch in range(training_params['num_epochs']):
         train_metrics = train_epoch(
-            model, dataloaders['train'], optimizer, criterion, device, tracker
+            model, dataloaders['train'], optimizer, criterion,
+            device, tracker, epoch, split
         )
 
         val_metrics = evaluate_model(
-            model, dataloaders['val'], criterion, device, tracker
+            model, dataloaders['val'], criterion, device,
+            tracker, epoch, split, mode='val'
         )
 
         print(f"\nSplit {split}, Epoch {epoch + 1}/{training_params['num_epochs']}")
@@ -213,6 +264,11 @@ def train_split(split, model, dataloaders, criterion, optimizer, training_params
         if val_metrics['loss'] < best_val_loss:
             best_val_loss = val_metrics['loss']
             best_model_state = model.state_dict().copy()
+
+            # Log best model checkpoint to wandb
+            checkpoint_path = f"best_model_split_{split}.pt"
+            torch.save(best_model_state, checkpoint_path)
+            wandb.save(checkpoint_path)
 
         # Early stopping check
         early_stopping(val_metrics['loss'], model)
@@ -225,8 +281,20 @@ def train_split(split, model, dataloaders, criterion, optimizer, training_params
 
     # Final evaluation on test set
     test_metrics = evaluate_model(
-        model, dataloaders['test'], criterion, device, tracker
+        model, dataloaders['test'], criterion, device,
+        tracker, epoch, split, mode='test'
     )
+
+    # Log final test metrics
+    wandb.log({
+        f"test/final_loss_split_{split}": test_metrics['loss'],
+        f"test/final_accuracy_split_{split}": test_metrics['accuracy'],
+        f"test/final_auprc_split_{split}": test_metrics['auprc'],
+        f"test/final_auroc_split_{split}": test_metrics['auroc']
+    })
+
+    # Close wandb run
+    wandb.finish()
 
     return test_metrics
 
@@ -245,15 +313,16 @@ def calculate_final_metrics(splits_metrics):
 
 
 def train_cross_validation(model_class, model_params, training_params, device, split_number=None):
-    """Run training pipeline, either for all splits or a specific split
+    """Run training pipeline with wandb logging"""
+    wandb.init(
+        project="DSSM-Mortality",
+        name="cross_validation",
+        config={
+            "model_params": model_params,
+            "training_params": training_params,
+        }
+    )
 
-    Args:
-        model_class: The model class to train
-        model_params: Model parameters dictionary
-        training_params: Training parameters dictionary
-        device: torch device to use
-        split_number: Optional; If provided, trains only on that split (1-5)
-    """
     log_path = setup_logging()
     splits_metrics = []
 
@@ -264,47 +333,46 @@ def train_cross_validation(model_class, model_params, training_params, device, s
         'final_metrics': None
     }
 
-    # Determine which splits to run
-    if split_number is not None:
-        if not 1 <= split_number <= 5:
-            raise ValueError("split_number must be between 1 and 5")
-        splits_to_run = [split_number]
-    else:
-        splits_to_run = range(1, 6)
+    splits_to_run = [split_number] if split_number is not None else range(1, 6)
 
     for split in splits_to_run:
-        print(f"\n=== Training on Split {split}/{len(splits_to_run)} ===")
-
-        # Initialize training components for this split
         model, dataloaders, criterion, optimizer = initialize_training(
             model_class, model_params, training_params, split, device
         )
 
-        # Train on this split
         split_metrics = train_split(
             split, model, dataloaders, criterion, optimizer,
             training_params, device
         )
         splits_metrics.append(split_metrics)
 
-        # Save intermediate results
         training_history['splits_metrics'].append({
             'split': split,
             'metrics': split_metrics
         })
+
+        # Save intermediate results
         with open(log_path, 'w') as f:
             json.dump(training_history, f, indent=4)
 
-        print(f"\nSplit {split} Test Metrics:")
-        for k, v in split_metrics.items():
-            print(f"{k}: {v:.4f}")
-
     # Calculate and save final metrics
-    final_metrics = calculate_final_metrics(splits_metrics) if len(splits_metrics) > 1 else splits_metrics[0]
+    final_metrics = calculate_final_metrics(splits_metrics)
     training_history['final_metrics'] = final_metrics
 
-    with open(log_path, 'w') as f:
-        json.dump(training_history, f, indent=4)
+    # Log final cross-validation metrics
+    wandb.log({
+        "final/mean_loss": final_metrics['mean_loss'],
+        "final/mean_accuracy": final_metrics['mean_accuracy'],
+        "final/mean_auprc": final_metrics['mean_auprc'],
+        "final/mean_auroc": final_metrics['mean_auroc'],
+        "final/std_loss": final_metrics['std_loss'],
+        "final/std_accuracy": final_metrics['std_accuracy'],
+        "final/std_auprc": final_metrics['std_auprc'],
+        "final/std_auroc": final_metrics['std_auroc']
+    })
+
+    # Close wandb
+    wandb.finish()
 
     return final_metrics, splits_metrics
 
@@ -336,7 +404,21 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
     best_params = {}
     results = []
 
-    # Generate all parameter combinations using itertools.product
+    # Initialize wandb sweep configuration
+    sweep_config = {
+        'method': 'grid',
+        'name': 'dssm-grid-search',
+        'metric': {'name': 'auroc', 'goal': 'maximize'},
+        'parameters': {
+            'hidden_size': {'values': param_grid['hidden_size']},
+            'learning_rate': {'values': param_grid['learning_rate']},
+            'dropout_rate': {'values': param_grid['dropout_rate']}
+        }
+    }
+
+    wandb.sweep(sweep_config, project="DSSM-Mortality")
+
+    # Generate all parameter combinations
     param_names = ['hidden_size', 'learning_rate', 'dropout_rate']
     param_values = [param_grid[name] for name in param_names]
     param_combinations = list(itertools.product(*param_values))
@@ -345,6 +427,21 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
     print(f"Total parameter combinations to try: {total_combinations}")
 
     for i, (hidden_size, lr, dropout) in enumerate(param_combinations, 1):
+        # Start a new wandb run for this combination
+        wandb.init(
+            project="DSSM-Mortality",
+            group="grid-search",
+            name=f"trial_{i}",
+            config={
+                'hidden_size': hidden_size,
+                'learning_rate': lr,
+                'dropout_rate': dropout,
+                'base_model_params': base_model_params,
+                'base_training_params': base_training_params
+            },
+            reinit=True
+        )
+
         model_params = base_model_params.copy()
         training_params = base_training_params.copy()
 
@@ -364,6 +461,14 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
             split_number=1
         )
 
+        # Log metrics to wandb
+        wandb.log({
+            'test_loss': metrics['loss'],
+            'test_accuracy': metrics['accuracy'],
+            'test_auprc': metrics['auprc'],
+            'test_auroc': metrics['auroc']
+        })
+
         # Save results
         results.append({
             'params': {
@@ -375,17 +480,22 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
         })
 
         # Update best parameters if improved
-        if metrics['auroc'] > best_metrics['auroc']:  # Changed from mean_auroc since we're using single split
+        if metrics['auroc'] > best_metrics['auroc']:
             best_metrics = metrics
             best_params = {
                 'hidden_size': hidden_size,
                 'learning_rate': lr,
                 'dropout_rate': dropout
             }
+
+            # Log best model configuration
+            wandb.run.summary['best_auroc'] = metrics['auroc']
+            wandb.run.summary['best_params'] = best_params
+
             print("\nNew best parameters found!")
             print(f"New best AUROC: {best_metrics['auroc']:.4f}")
 
-        # Save intermediate results to avoid losing progress
+        # Save intermediate results
         save_path = 'grid_search_intermediate_results.json'
         intermediate_results = {
             'completed_combinations': i,
@@ -396,6 +506,12 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
         }
         with open(save_path, 'w') as f:
             json.dump(intermediate_results, f, indent=4)
+
+        # Close the wandb run
+        wandb.finish()
+
+    # Create a final summary plot
+    create_grid_search_summary(results)
 
     return best_params, best_metrics, results
 
@@ -454,6 +570,8 @@ def grid_search():
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
+    wandb.init(project="DSSM-Mortality", name="grid-search-main")
+
     base_model_params = {
         'input_size': 37,
         'static_input_size': 8,
@@ -483,6 +601,11 @@ def grid_search():
         device
     )
 
+    wandb.log({
+        'final_best_params': best_params,
+        'final_best_metrics': best_metrics
+    })
+
     results_path = Path('grid_search_results.json')
     with open(results_path, 'w') as f:
         json.dump({
@@ -496,6 +619,32 @@ def grid_search():
     print("\nBest metrics achieved:")
     print(json.dumps(best_metrics, indent=2))
 
+    wandb.finish()
+
+
+def create_grid_search_summary(results):
+    """Create summary visualizations of grid search results"""
+
+    with wandb.init(project="DSSM-Mortality", name="grid-search-summary", job_type="analysis") as run:
+        # Create a parallel coordinates plot
+        parallel_coords_data = [{
+            'hidden_size': r['params']['hidden_size'],
+            'learning_rate': r['params']['learning_rate'],
+            'dropout_rate': r['params']['dropout_rate'],
+            'auroc': r['metrics']['auroc'],
+            'auprc': r['metrics']['auprc'],
+            'accuracy': r['metrics']['accuracy']
+        } for r in results]
+
+        wandb.log({"grid_search_results": wandb.Table(data=parallel_coords_data)})
+
+        # Create custom plots using wandb
+        wandb.log({
+            "parameter_importance": wandb.plot.parallel_coordinates(
+                parallel_coords_data,
+                cols=['hidden_size', 'learning_rate', 'dropout_rate', 'auroc']
+            )
+        })
 
 if __name__ == "__main__":
     cross_validation()
