@@ -328,20 +328,17 @@ def train_cross_validation(model_class, model_params, training_params, device, s
 def define_parameter_grid():
     return {
         # Model parameters
-        'hidden_size': [64, 128, 256, 512],  # Capacity of the model
-        'num_layers': [2, 3, 4],  # Depth of LSTM
-        'dropout_rate': [0.1, 0.15, 0.2, 0.25],   # Regularization strength
+        'hidden_size': [64, 128, 256],  # Capacity of the model
+        'num_layers': [2, 3],  # Depth of LSTM
+        'dropout_rate': [0.2, 0.3],   # Regularization strength
 
         # Training parameters
-        'learning_rate': [0.005, 0.001, 0.0005, 0.0001],  # Regularization strength
-        'batch_size': [32, 64, 128],  # Batch sizes
-
+        'learning_rate': [0.0005, 0.0001],  # Regularization strength
+        'batch_size': [32, 64],  # Batch sizes
         'class_weights': [
-            [1.0, 7.143],  # Original dataset ratio
-            [1.0, 8.5],  # Slightly higher weight for minority class
-            [1.0, 10.0],  # Strong emphasis on minority class
-            [1.0, 6.0],  # Slightly lower weight to reduce false positives
-            [1.0, 12.0]  # Very strong emphasis on minority class detection
+            [1.0, 7.143],   # Original ratio (performed well)
+            [1.0, 8.5],     # Slightly higher weight
+            [1.0, 6.0]      # Slightly lower weight
         ]
     }
 
