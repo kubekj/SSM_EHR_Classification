@@ -333,12 +333,11 @@ def define_parameter_grid():
         'dropout_rate': [0.2, 0.3],   # Regularization strength
 
         # Training parameters
-        'learning_rate': [0.0005, 0.0001],  # Regularization strength
+        'learning_rate': [0.001, 0.0001],  # Regularization strength
         'batch_size': [32, 64],  # Batch sizes
         'class_weights': [
             [1.0, 7.143],   # Original ratio (performed well)
             [1.0, 8.5],     # Slightly higher weight
-            [1.0, 6.0]      # Slightly lower weight
         ]
     }
 
