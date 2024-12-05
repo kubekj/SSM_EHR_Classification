@@ -498,4 +498,4 @@ def grid_search():
 
 
 if __name__ == "__main__":
-    cross_validation()
+    grid_search()
