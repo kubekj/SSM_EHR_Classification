@@ -312,80 +312,123 @@ def train_cross_validation(model_class, model_params, training_params, device, s
 def define_parameter_grid():
     return {
         # Model parameters
-        'hidden_size': [32, 64, 128, 256],  # Capacity of the model
-        'num_layers': [1, 2, 3],  # Depth of LSTM
-        'dropout_rate': [0.1, 0.2, 0.3, 0.4],  # Regularization strength
+        'hidden_size': [64, 128, 256, 512],  # Capacity of the model
+        'num_layers': [2, 3, 4],  # Depth of LSTM
+        'dropout_rate': [0.1, 0.15, 0.2, 0.25],   # Regularization strength
 
         # Training parameters
-        'learning_rate': [0.01, 0.001, 0.0001],  # Learning rate range
-        'batch_size': [16, 32, 64],  # Batch size options
+        'learning_rate': [0.005, 0.001, 0.0005, 0.0001],  # Regularization strength
+        'batch_size': [32, 64, 128],  # Batch sizes
 
-        # Class weights (given high class imbalance)
         'class_weights': [
-            [1.0, 7.143],  # Original weights
-            [1.163, 7.143],  # Current weights
-            [1.0, 6.0],  # Alternative weights
-            [1.0, 5.0]  # Alternative weights #2
+            [1.0, 7.143],  # Original dataset ratio
+            [1.0, 8.5],  # Slightly higher weight for minority class
+            [1.0, 10.0],  # Strong emphasis on minority class
+            [1.0, 6.0],  # Slightly lower weight to reduce false positives
+            [1.0, 12.0]  # Very strong emphasis on minority class detection
         ]
     }
 
 
+def calculate_combined_score(metrics):
+    """Calculate a combined score giving higher weight to AUPRC due to class imbalance"""
+    weights = {
+        'mean_auroc': 0.3,
+        'mean_auprc': 0.4,  # Higher weight due to class imbalance
+        'mean_accuracy': 0.3
+    }
+
+    combined_score = (
+            weights['mean_auroc'] * metrics['mean_auroc'] +
+            weights['mean_auprc'] * metrics['mean_auprc'] +
+            weights['mean_accuracy'] * metrics['mean_accuracy']
+    )
+
+    return combined_score
+
+
 def train_with_grid_search(model_class, base_model_params, base_training_params, device):
     param_grid = define_parameter_grid()
-    best_metrics = {'auroc': 0}
+    best_metrics = {'combined_score': 0}
     best_params = {}
     results = []
 
-    # Generate all parameter combinations using itertools.product
-    param_names = ['hidden_size', 'learning_rate', 'dropout_rate']
-    param_values = [param_grid[name] for name in param_names]
+    param_values = [
+        param_grid['hidden_size'],
+        param_grid['num_layers'],
+        param_grid['dropout_rate'],
+        param_grid['learning_rate'],
+        param_grid['batch_size'],
+        param_grid['class_weights'],
+        [True, False]
+    ]
     param_combinations = list(itertools.product(*param_values))
 
     total_combinations = len(param_combinations)
     print(f"Total parameter combinations to try: {total_combinations}")
 
-    for i, (hidden_size, lr, dropout) in enumerate(param_combinations, 1):
+    for i, params in enumerate(param_combinations, 1):
+        (hidden_size, num_layers, dropout, lr, batch_size,
+         class_weights, bidirectional) = params
+
         model_params = base_model_params.copy()
         training_params = base_training_params.copy()
 
-        model_params['hidden_size'] = hidden_size
-        model_params['dropout_rate'] = dropout
-        training_params['learning_rate'] = lr
+        model_params.update({
+            'hidden_size': hidden_size,
+            'num_layers': num_layers,
+            'dropout_rate': dropout,
+            'bidirectional': bidirectional
+        })
+
+        training_params.update({
+            'learning_rate': lr,
+            'class_weights': class_weights,
+            'loader_params': {
+                'batch_size': batch_size,
+                'shuffle': True
+            }
+        })
 
         print(f"\nTrying combination {i}/{total_combinations}:")
-        print(f"hidden_size={hidden_size}, lr={lr}, dropout={dropout}")
+        print(f"Parameters: hidden_size={hidden_size}, num_layers={num_layers}, "
+              f"dropout={dropout}, lr={lr}, batch_size={batch_size}, "
+              f"class_weights={class_weights}, bidirectional={bidirectional}")
 
-        # Train model with these parameters
-        metrics, _ = train_cross_validation(
+        metrics, splits_metrics = train_cross_validation(
             model_class=model_class,
             model_params=model_params,
             training_params=training_params,
-            device=device,
-            split_number=1
+            device=device
         )
 
-        # Save results
+        combined_score = calculate_combined_score(metrics)
+        metrics['combined_score'] = combined_score
+
         results.append({
             'params': {
                 'hidden_size': hidden_size,
+                'num_layers': num_layers,
+                'dropout_rate': dropout,
                 'learning_rate': lr,
-                'dropout_rate': dropout
+                'batch_size': batch_size,
+                'class_weights': class_weights,
+                'bidirectional': bidirectional
             },
-            'metrics': metrics
+            'metrics': metrics,
+            'splits_metrics': splits_metrics,
+            'combined_score': combined_score
         })
 
-        # Update best parameters if improved
-        if metrics['auroc'] > best_metrics['auroc']:  # Changed from mean_auroc since we're using single split
+        if combined_score > best_metrics['combined_score']:
             best_metrics = metrics
-            best_params = {
-                'hidden_size': hidden_size,
-                'learning_rate': lr,
-                'dropout_rate': dropout
-            }
+            best_params = results[-1]['params']
             print("\nNew best parameters found!")
-            print(f"New best AUROC: {best_metrics['auroc']:.4f}")
+            print(f"New best combined score: {combined_score:.4f}")
+            print(f"AUROC: {metrics['mean_auroc']:.4f}")
+            print(f"AUPRC: {metrics['mean_auprc']:.4f}")
+            print(f"Accuracy: {metrics['mean_accuracy']:.4f}")
 
-        # Save intermediate results to avoid losing progress
         save_path = 'grid_search_intermediate_results.json'
         intermediate_results = {
             'completed_combinations': i,
