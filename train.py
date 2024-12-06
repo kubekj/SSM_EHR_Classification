@@ -522,7 +522,7 @@ def grid_search():
         device
     )
 
-    results_path = Path('grid_search_results.json')
+    results_path = Path('model_outputs/dssm_output/grid_search_results_with_bidirection.json')
     with open(results_path, 'w') as f:
         json.dump({
             'best_params': best_params,
