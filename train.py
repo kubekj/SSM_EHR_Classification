@@ -553,7 +553,7 @@ def initialize_wandb(config=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='DSSM Training')
     parser.add_argument('--mode', type=str, choices=['cross_validation', 'grid_search'],
-                        default='cross_validation', help='Training mode')
+                      default='cross_validation', help='Training mode')
 
     args = parser.parse_args()
 
@@ -566,14 +566,6 @@ if __name__ == "__main__":
         torch.cuda.manual_seed_all(42)
 
     if args.mode == 'cross_validation':
-        try:
-            wandb_key = get_wandb_key()
-            wandb.login(key=wandb_key)
-            print("Successfully logged into Weights & Biases!")
-        except Exception as e:
-            print(f"Error logging into Weights & Biases: {str(e)}")
-            print("Continuing without W&B logging...")
-
         cross_validation(device)
-    elif args.mode == 'grid_search':
+    else:
         grid_search(device)
