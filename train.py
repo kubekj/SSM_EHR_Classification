@@ -94,11 +94,7 @@ def train_epoch(model, loader, optimizer, criterion, device, tracker, epoch, spl
     model.train()
     tracker.reset()
 
-    # Track per-batch metrics
-    batch_losses = []
-    batch_accuracies = []
-
-    for batch_idx, batch in enumerate(loader):
+    for batch in loader:
         temporal_batch, static_batch, target_batch, seq_lengths = [
             x.to(device) for x in batch
         ]
@@ -111,33 +107,14 @@ def train_epoch(model, loader, optimizer, criterion, device, tracker, epoch, spl
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
 
-        # Calculate batch metrics
-        predictions = torch.argmax(outputs, dim=1)
-        batch_accuracy = (predictions == target_batch).float().mean().item()
-
-        batch_losses.append(loss.item())
-        batch_accuracies.append(batch_accuracy)
-
         tracker.update(loss.item(), outputs, target_batch, temporal_batch.size(0))
-
-        if use_wandb:
-            wandb.log({
-                f"split_{split}/train/batch_loss": loss.item(),
-                f"split_{split}/train/batch_accuracy": batch_accuracy,
-                f"split_{split}/train/batch": batch_idx + epoch * len(loader),
-                "epoch": epoch
-            })
 
     metrics = tracker.get_metrics()
 
     if use_wandb:
         wandb.log({
-            f"split_{split}/train/epoch_loss": metrics['loss'],
-            f"split_{split}/train/epoch_accuracy": metrics['accuracy'],
-            f"split_{split}/train/epoch_auprc": metrics['auprc'],
-            f"split_{split}/train/epoch_auroc": metrics['auroc'],
-            f"split_{split}/train/loss_std": np.std(batch_losses),
-            f"split_{split}/train/accuracy_std": np.std(batch_accuracies),
+            f"split_{split}/train/loss": metrics['loss'],
+            f"split_{split}/train/auroc": metrics['auroc'],
             "epoch": epoch
         })
 
@@ -168,30 +145,23 @@ def evaluate_model(model, loader, criterion, device, tracker, epoch, split, phas
 
     metrics = tracker.get_metrics()
 
-    if use_wandb:
-        prefix = f"split_{split}/{phase}"
+    if use_wandb and phase != 'test':  # Only log validation metrics during training
         wandb.log({
-            f"{prefix}/loss": metrics['loss'],
-            f"{prefix}/accuracy": metrics['accuracy'],
-            f"{prefix}/auprc": metrics['auprc'],
-            f"{prefix}/auroc": metrics['auroc'],
+            f"split_{split}/{phase}/loss": metrics['loss'],
+            f"split_{split}/{phase}/auroc": metrics['auroc'],
+            f"split_{split}/{phase}/auprc": metrics['auprc'],
             "epoch": epoch
         })
 
-        wandb.log({
-            f"{prefix}/confusion_matrix": wandb.plot.confusion_matrix(
-                y_true=all_targets,
-                preds=all_predictions,
-                class_names=['Survived', 'Deceased']
-            ),
-            "epoch": epoch
-        })
-
-        wandb.log({
-            f"{prefix}/prediction_dist": wandb.Histogram(all_predictions),
-            f"{prefix}/target_dist": wandb.Histogram(all_targets),
-            "epoch": epoch
-        })
+        if epoch % 10 == 0:  # Log confusion matrix less frequently
+            wandb.log({
+                f"split_{split}/{phase}/confusion_matrix": wandb.plot.confusion_matrix(
+                    y_true=all_targets,
+                    preds=all_predictions,
+                    class_names=['Survived', 'Deceased']
+                ),
+                "epoch": epoch
+            })
 
     return metrics
 
@@ -259,16 +229,11 @@ def initialize_training(model_class, model_params, training_params, split, devic
 
 
 def train_split(split, model, dataloaders, criterion, optimizer, training_params, device, use_wandb=False):
-    """Train model on a single data split with enhanced logging"""
     tracker = MetricsTracker()
     early_stopping = EarlyStopping(**training_params['early_stopping'])
     best_val_loss = float('inf')
     best_model_state = None
-
-    # Track learning curves
-    train_losses = []
-    val_losses = []
-    val_aurocs = []
+    best_metrics = None
 
     for epoch in range(training_params['num_epochs']):
         # Training phase
@@ -276,15 +241,12 @@ def train_split(split, model, dataloaders, criterion, optimizer, training_params
             model, dataloaders['train'], optimizer, criterion,
             device, tracker, epoch, split, use_wandb
         )
-        train_losses.append(train_metrics['loss'])
 
         # Validation phase
         val_metrics = evaluate_model(
             model, dataloaders['val'], criterion, device,
             tracker, epoch, split, 'val', use_wandb
         )
-        val_losses.append(val_metrics['loss'])
-        val_aurocs.append(val_metrics['auroc'])
 
         print(f"\nSplit {split}, Epoch {epoch + 1}/{training_params['num_epochs']}")
         print(f"Train Loss: {train_metrics['loss']:.4f}, Val Loss: {val_metrics['loss']:.4f}")
@@ -293,11 +255,12 @@ def train_split(split, model, dataloaders, criterion, optimizer, training_params
         if val_metrics['loss'] < best_val_loss:
             best_val_loss = val_metrics['loss']
             best_model_state = model.state_dict().copy()
+            best_metrics = val_metrics
 
             if use_wandb:
                 wandb.log({
-                    f"split_{split}/best_val_loss": best_val_loss,
                     f"split_{split}/best_val_auroc": val_metrics['auroc'],
+                    f"split_{split}/best_val_auprc": val_metrics['auprc'],
                     "epoch": epoch
                 })
 
@@ -313,16 +276,7 @@ def train_split(split, model, dataloaders, criterion, optimizer, training_params
         tracker, epoch, split, 'test', use_wandb
     )
 
-    if use_wandb:
-        for i, (train_loss, val_loss, val_auroc) in enumerate(zip(train_losses, val_losses, val_aurocs)):
-            wandb.log({
-                f"split_{split}/learning_curves/train_loss": train_loss,
-                f"split_{split}/learning_curves/val_loss": val_loss,
-                f"split_{split}/learning_curves/val_auroc": val_auroc,
-                "epoch": i
-            })
-
-    return test_metrics
+    return test_metrics, best_metrics
 
 
 def calculate_final_metrics(splits_metrics):
@@ -339,87 +293,50 @@ def calculate_final_metrics(splits_metrics):
 
 
 def train_cross_validation(model_class, model_params, training_params, device, split_number=None):
-    try:
-        wandb.init(
-            project="DSSM-Mortality",
-            config={
-                "model_params": model_params,
-                "training_params": training_params,
-            }
-        )
-        use_wandb = True
-    except Exception as e:
-        print(f"Error initializing Weights & Biases: {str(e)}")
-        print("Continuing without W&B logging...")
-        use_wandb = False
+    use_wandb = initialize_wandb({
+        "model_params": model_params,
+        "training_params": training_params,
+    })
 
     log_path = setup_logging()
     splits_metrics = []
+    val_metrics = []
 
-    training_history = {
-        'model_params': model_params,
-        'training_params': training_params,
-        'splits_metrics': [],
-        'final_metrics': None
-    }
+    try:
+        splits_to_run = [split_number] if split_number is not None else range(1, 6)
 
-    splits_to_run = [split_number] if split_number is not None else range(1, 6)
+        for split in splits_to_run:
+            print(f"\n=== Training on Split {split}/{len(splits_to_run)} ===")
 
-    for split in splits_to_run:
-        print(f"\n=== Training on Split {split}/{len(splits_to_run)} ===")
+            model, dataloaders, criterion, optimizer = initialize_training(
+                model_class, model_params, training_params, split, device
+            )
 
-        model, dataloaders, criterion, optimizer = initialize_training(
-            model_class, model_params, training_params, split, device
-        )
+            test_metrics, best_val_metrics = train_split(
+                split, model, dataloaders, criterion, optimizer,
+                training_params, device, use_wandb
+            )
 
-        split_metrics = train_split(
-            split, model, dataloaders, criterion, optimizer,
-            training_params, device, use_wandb
-        )
-        splits_metrics.append(split_metrics)
+            splits_metrics.append(test_metrics)
+            val_metrics.append(best_val_metrics)
 
-        training_history['splits_metrics'].append({
-            'split': split,
-            'metrics': split_metrics
-        })
+        final_metrics = calculate_final_metrics(splits_metrics)
+        final_val_metrics = calculate_final_metrics(val_metrics)
 
         if use_wandb:
-            # Log split results to wandb
+            # Log only final cross-validation metrics
             wandb.log({
-                f"split_{split}/loss": split_metrics['loss'],
-                f"split_{split}/accuracy": split_metrics['accuracy'],
-                f"split_{split}/auprc": split_metrics['auprc'],
-                f"split_{split}/auroc": split_metrics['auroc']
+                "final/test_auroc": final_metrics['mean_auroc'],
+                "final/test_auprc": final_metrics['mean_auprc'],
+                "final/test_accuracy": final_metrics['mean_accuracy'],
+                "final/val_auroc": final_val_metrics['mean_auroc'],
+                "final/val_auprc": final_val_metrics['mean_auprc'],
+                "final/val_accuracy": final_val_metrics['mean_accuracy']
             })
 
-        with open(log_path, 'w') as f:
-            json.dump(training_history, f, indent=4)
-
-        print(f"\nSplit {split} Test Metrics:")
-        for k, v in split_metrics.items():
-            print(f"{k}: {v:.4f}")
-
-    final_metrics = calculate_final_metrics(splits_metrics)
-    training_history['final_metrics'] = final_metrics
-
-    if use_wandb:
-        # Log final cross-validation metrics
-        wandb.log({
-            "final/mean_loss": final_metrics['mean_loss'],
-            "final/mean_accuracy": final_metrics['mean_accuracy'],
-            "final/mean_auprc": final_metrics['mean_auprc'],
-            "final/mean_auroc": final_metrics['mean_auroc'],
-            "final/std_loss": final_metrics['std_loss'],
-            "final/std_accuracy": final_metrics['std_accuracy'],
-            "final/std_auprc": final_metrics['std_auprc'],
-            "final/std_auroc": final_metrics['std_auroc']
-        })
-
-    with open(log_path, 'w') as f:
-        json.dump(training_history, f, indent=4)
-
-    if use_wandb:
-        wandb.finish()
+    finally:
+        if use_wandb:
+            wandb.finish()
 
     return final_metrics, splits_metrics
 
