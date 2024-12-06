@@ -268,7 +268,6 @@ def train_cross_validation(model_class, model_params, training_params, device, s
     splits_metrics = []
     val_metrics = []
 
-    # Initialize wandb only once at the start
     use_wandb = initialize_wandb({
         "model_params": model_params,
         "training_params": training_params,
@@ -292,18 +291,57 @@ def train_cross_validation(model_class, model_params, training_params, device, s
             splits_metrics.append(test_metrics)
             val_metrics.append(best_val_metrics)
 
-        # Calculate and log final metrics
+            if use_wandb:
+                # Log metrics for each split to show progression
+                wandb.log({
+                    "splits/test_auroc": test_metrics['auroc'],
+                    "splits/test_auprc": test_metrics['auprc'],
+                    "splits/val_auroc": best_val_metrics['auroc'],
+                    "splits/val_auprc": best_val_metrics['auprc'],
+                    "split": split
+                })
+
+        # Calculate final metrics
         final_metrics = calculate_final_metrics(splits_metrics)
         final_val_metrics = calculate_final_metrics(val_metrics)
 
         if use_wandb:
-            wandb.log({
-                "final/test_auroc": final_metrics['mean_auroc'],
-                "final/test_auprc": final_metrics['mean_auprc'],
+            # Create summary statistics data
+            metrics_summary = {
+                'test_auroc': [m['auroc'] for m in splits_metrics],
+                'test_auprc': [m['auprc'] for m in splits_metrics],
+                'val_auroc': [m['auroc'] for m in val_metrics],
+                'val_auprc': [m['auprc'] for m in val_metrics]
+            }
+
+            # Log boxplot data
+            for metric_name, values in metrics_summary.items():
+                wandb.log({
+                    f"summary/{metric_name}_distribution": wandb.plot.box(
+                        wandb.Table(data=[[v] for v in values], columns=["values"]),
+                        "values",
+                        title=f"{metric_name} Distribution Across Splits"
+                    )
+                })
+
+            # Log table with all splits results
+            split_results = wandb.Table(columns=['split', 'test_auroc', 'test_auprc', 'val_auroc', 'val_auprc'])
+            for i, (test_m, val_m) in enumerate(zip(splits_metrics, val_metrics)):
+                split_results.add_data(i + 1,
+                                       test_m['auroc'],
+                                       test_m['auprc'],
+                                       val_m['auroc'],
+                                       val_m['auprc'])
+            wandb.log({"summary/splits_results": split_results})
+
+            # Log final aggregated metrics
+            wandb.run.summary.update({
+                "final/test_auroc_mean": final_metrics['mean_auroc'],
+                "final/test_auprc_mean": final_metrics['mean_auprc'],
                 "final/test_auroc_std": final_metrics['std_auroc'],
                 "final/test_auprc_std": final_metrics['std_auprc'],
-                "final/val_auroc": final_val_metrics['mean_auroc'],
-                "final/val_auprc": final_val_metrics['mean_auprc']
+                "final/val_auroc_mean": final_val_metrics['mean_auroc'],
+                "final/val_auprc_mean": final_val_metrics['mean_auprc']
             })
 
     finally:
