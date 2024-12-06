@@ -466,20 +466,20 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
 def cross_validation(device):
     model_params = {
         'input_size': 37,
-        'hidden_size': 64,
+        'hidden_size': 32,
         'static_input_size': 8,
         'num_classes': 2,
-        'num_layers': 3,
-        'dropout_rate': 0.1,
-        'bidirectional': False
+        'num_layers': 2,
+        'dropout_rate': 0.2,
+        'bidirectional': True
     }
 
     training_params = {
         'num_epochs': 100,
-        'learning_rate': 0.001,
-        'class_weights': [1.0, 6.0],
+        'learning_rate': 0.0001,
+        'class_weights': [1.0, 7.143],
         'loader_params': {
-            'batch_size': 32,
+            'batch_size': 64,
             'shuffle': True
         },
         'early_stopping': {
