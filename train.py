@@ -90,11 +90,15 @@ class EarlyStopping:
             self.counter = 0
 
 
-def train_epoch(model, loader, optimizer, criterion, device, tracker):
+def train_epoch(model, loader, optimizer, criterion, device, tracker, epoch, split, use_wandb=False):
     model.train()
     tracker.reset()
 
-    for batch in loader:
+    # Track per-batch metrics
+    batch_losses = []
+    batch_accuracies = []
+
+    for batch_idx, batch in enumerate(loader):
         temporal_batch, static_batch, target_batch, seq_lengths = [
             x.to(device) for x in batch
         ]
@@ -107,14 +111,45 @@ def train_epoch(model, loader, optimizer, criterion, device, tracker):
         torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
         optimizer.step()
 
+        # Calculate batch metrics
+        predictions = torch.argmax(outputs, dim=1)
+        batch_accuracy = (predictions == target_batch).float().mean().item()
+
+        batch_losses.append(loss.item())
+        batch_accuracies.append(batch_accuracy)
+
         tracker.update(loss.item(), outputs, target_batch, temporal_batch.size(0))
 
-    return tracker.get_metrics()
+        if use_wandb:
+            wandb.log({
+                f"split_{split}/train/batch_loss": loss.item(),
+                f"split_{split}/train/batch_accuracy": batch_accuracy,
+                f"split_{split}/train/batch": batch_idx + epoch * len(loader),
+                "epoch": epoch
+            })
+
+    metrics = tracker.get_metrics()
+
+    if use_wandb:
+        wandb.log({
+            f"split_{split}/train/epoch_loss": metrics['loss'],
+            f"split_{split}/train/epoch_accuracy": metrics['accuracy'],
+            f"split_{split}/train/epoch_auprc": metrics['auprc'],
+            f"split_{split}/train/epoch_auroc": metrics['auroc'],
+            f"split_{split}/train/loss_std": np.std(batch_losses),
+            f"split_{split}/train/accuracy_std": np.std(batch_accuracies),
+            "epoch": epoch
+        })
+
+    return metrics
 
 
-def evaluate_model(model, loader, criterion, device, tracker):
+def evaluate_model(model, loader, criterion, device, tracker, epoch, split, phase='val', use_wandb=False):
     model.eval()
     tracker.reset()
+
+    all_predictions = []
+    all_targets = []
 
     with torch.no_grad():
         for batch in loader:
@@ -125,9 +160,40 @@ def evaluate_model(model, loader, criterion, device, tracker):
             outputs = model(temporal_batch, static_batch, seq_lengths)
             loss = criterion(outputs, target_batch)
 
+            predictions = torch.argmax(outputs, dim=1)
+            all_predictions.extend(predictions.cpu().numpy())
+            all_targets.extend(target_batch.cpu().numpy())
+
             tracker.update(loss.item(), outputs, target_batch, temporal_batch.size(0))
 
-    return tracker.get_metrics()
+    metrics = tracker.get_metrics()
+
+    if use_wandb:
+        prefix = f"split_{split}/{phase}"
+        wandb.log({
+            f"{prefix}/loss": metrics['loss'],
+            f"{prefix}/accuracy": metrics['accuracy'],
+            f"{prefix}/auprc": metrics['auprc'],
+            f"{prefix}/auroc": metrics['auroc'],
+            "epoch": epoch
+        })
+
+        wandb.log({
+            f"{prefix}/confusion_matrix": wandb.plot.confusion_matrix(
+                y_true=all_targets,
+                preds=all_predictions,
+                class_names=['Survived', 'Deceased']
+            ),
+            "epoch": epoch
+        })
+
+        wandb.log({
+            f"{prefix}/prediction_dist": wandb.Histogram(all_predictions),
+            f"{prefix}/target_dist": wandb.Histogram(all_targets),
+            "epoch": epoch
+        })
+
+    return metrics
 
 
 def create_data_loader(data, batch_size, shuffle=True):
@@ -192,44 +258,69 @@ def initialize_training(model_class, model_params, training_params, split, devic
     return model, dataloaders, criterion, optimizer
 
 
-def train_split(split, model, dataloaders, criterion, optimizer, training_params, device):
-    """Train model on a single data split"""
+def train_split(split, model, dataloaders, criterion, optimizer, training_params, device, use_wandb=False):
+    """Train model on a single data split with enhanced logging"""
     tracker = MetricsTracker()
     early_stopping = EarlyStopping(**training_params['early_stopping'])
     best_val_loss = float('inf')
     best_model_state = None
 
-    for epoch in range(training_params['num_epochs']):
-        train_metrics = train_epoch(
-            model, dataloaders['train'], optimizer, criterion, device, tracker
-        )
+    # Track learning curves
+    train_losses = []
+    val_losses = []
+    val_aurocs = []
 
-        val_metrics = evaluate_model(
-            model, dataloaders['val'], criterion, device, tracker
+    for epoch in range(training_params['num_epochs']):
+        # Training phase
+        train_metrics = train_epoch(
+            model, dataloaders['train'], optimizer, criterion,
+            device, tracker, epoch, split, use_wandb
         )
+        train_losses.append(train_metrics['loss'])
+
+        # Validation phase
+        val_metrics = evaluate_model(
+            model, dataloaders['val'], criterion, device,
+            tracker, epoch, split, 'val', use_wandb
+        )
+        val_losses.append(val_metrics['loss'])
+        val_aurocs.append(val_metrics['auroc'])
 
         print(f"\nSplit {split}, Epoch {epoch + 1}/{training_params['num_epochs']}")
         print(f"Train Loss: {train_metrics['loss']:.4f}, Val Loss: {val_metrics['loss']:.4f}")
         print(f"Val AUROC: {val_metrics['auroc']:.4f}, Val AUPRC: {val_metrics['auprc']:.4f}")
 
-        # Save best model
         if val_metrics['loss'] < best_val_loss:
             best_val_loss = val_metrics['loss']
             best_model_state = model.state_dict().copy()
 
-        # Early stopping check
+            if use_wandb:
+                wandb.log({
+                    f"split_{split}/best_val_loss": best_val_loss,
+                    f"split_{split}/best_val_auroc": val_metrics['auroc'],
+                    "epoch": epoch
+                })
+
         early_stopping(val_metrics['loss'], model)
         if early_stopping.early_stop:
             print(f"Early stopping triggered at epoch {epoch}")
             break
 
-    # Load best model for testing
+    # Load best model and evaluate on test set
     model.load_state_dict(best_model_state)
-
-    # Final evaluation on test set
     test_metrics = evaluate_model(
-        model, dataloaders['test'], criterion, device, tracker
+        model, dataloaders['test'], criterion, device,
+        tracker, epoch, split, 'test', use_wandb
     )
+
+    if use_wandb:
+        for i, (train_loss, val_loss, val_auroc) in enumerate(zip(train_losses, val_losses, val_aurocs)):
+            wandb.log({
+                f"split_{split}/learning_curves/train_loss": train_loss,
+                f"split_{split}/learning_curves/val_loss": val_loss,
+                f"split_{split}/learning_curves/val_auroc": val_auroc,
+                "epoch": i
+            })
 
     return test_metrics
 
@@ -283,7 +374,7 @@ def train_cross_validation(model_class, model_params, training_params, device, s
 
         split_metrics = train_split(
             split, model, dataloaders, criterion, optimizer,
-            training_params, device
+            training_params, device, use_wandb
         )
         splits_metrics.append(split_metrics)
 
