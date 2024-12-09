@@ -362,8 +362,8 @@ def define_parameter_grid():
         # Balancing parameters
         'balancing': [
             'none', 
-            # 'upsample', 
-            # 'downsample'
+            'upsample', 
+            'downsample'
             ],  # Balancing strategies
         'balancing_ratio': [1.0, 1.5, 2.0, 2.5, 3.0]  # Ratios for upsampling/downsampling
     }
