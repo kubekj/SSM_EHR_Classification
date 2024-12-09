@@ -13,6 +13,7 @@ def upsample_minority_class(data, target_label=0, upsample_ratio=2.0):
     Returns:
         list of dict: Dataset with upsampled minority class.
     """
+    print("Upsampling the minority class")
     # Separate the minority and majority classes
     minority_data = [record for record in data if record['labels'] == target_label]
     majority_data = [record for record in data if record['labels'] != target_label]
@@ -47,6 +48,7 @@ def downsample_majority_class(data, target_label=0, downsample_ratio=1.0):
     Returns:
         list of dict: Dataset with the specified class distribution.
     """
+    print("Downsampling the majority class")
     # Separate majority and minority classes
     minority_data = [record for record in data if record['labels'] != target_label]
     majority_data = [record for record in data if record['labels'] == target_label]
