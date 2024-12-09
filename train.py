@@ -14,6 +14,7 @@ from torch.utils.data import DataLoader, Dataset
 
 from models.dssm import DSSM
 
+from scripts.balancing import downsample_majority_class, upsample_minority_class, calculate_class_ratio
 
 class PhysionetDataset(Dataset):
     def __init__(self, data):
@@ -127,7 +128,29 @@ def evaluate_model(model, loader, criterion, device, tracker):
     return tracker.get_metrics()
 
 
-def create_data_loader(data, batch_size, shuffle=True):
+def create_data_loader(data, batch_size, shuffle=True, balancing='none', ratio=1.0):
+    """
+    Creates a DataLoader with optional class balancing.
+
+    Args:
+        data (list of dict): The dataset.
+        batch_size (int): Batch size for the DataLoader.
+        shuffle (bool): Whether to shuffle the data.
+        balancing (str): Type of balancing ('none', 'upsample', 'downsample').
+        ratio (float): Upsample or downsample ratio.
+
+    Returns:
+        DataLoader: A DataLoader object.
+    """
+    # print(f"Data ratio BEFORE balancing: {calculate_class_ratio(data)}")
+    
+    if balancing == 'upsample':
+        data = upsample_minority_class(data, target_label=1, upsample_ratio=ratio)
+    elif balancing == 'downsample':
+        data = downsample_majority_class(data, target_label=0, downsample_ratio=ratio)
+    
+    # print(f"Data ratio AFTER balancing: {calculate_class_ratio(data)}")
+
     dataset = PhysionetDataset(data)
     return DataLoader(
         dataset,
@@ -173,9 +196,20 @@ def initialize_training(model_class, model_params, training_params, split, devic
     train_data, val_data, test_data = load_split_data(split)
 
     dataloaders = {
-        'train': create_data_loader(train_data, **training_params['loader_params']),
-        'val': create_data_loader(val_data, **training_params['loader_params']),
-        'test': create_data_loader(test_data, **training_params['loader_params'])
+        'train': create_data_loader(
+            train_data, 
+            **training_params['loader_params'],
+            balancing=training_params.get('balancing', 'none'),
+            ratio=training_params.get('balancing_ratio', 1.0)
+        ),
+        'val': create_data_loader(
+            val_data, 
+            **training_params['loader_params']
+        ),
+        'test': create_data_loader(
+            test_data, 
+            **training_params['loader_params']
+        )
     }
 
     # Initialize model and training components
@@ -312,18 +346,28 @@ def train_cross_validation(model_class, model_params, training_params, device, s
 def define_parameter_grid():
     return {
         # Model parameters
-        'hidden_size': [32, 64],  # Capacity of the model
-        'num_layers': [2, 3],  # Depth of LSTM
-        'dropout_rate': [0.2, 0.3],   # Regularization strength
+        'hidden_size': [32],  # Capacity of the model
+        'num_layers': [2],  # Depth of LSTM
+        'dropout_rate': [0.2],  # Regularization strength
 
         # Training parameters
-        'learning_rate': [0.001, 0.0001],  # Regularization strength
-        'batch_size': [32, 64],  # Batch sizes
+        'learning_rate': [0.0001],  # Learning rates
+        'batch_size': [64],  # Batch sizes
         'class_weights': [
-            [1.0, 7.143],   # Original ratio (performed well)
-            [1.0, 8.5],     # Slightly higher weight
-        ]
+            [1,1]
+            # [1.0, 7.143],  # Original ratio (performed well)
+            # [1.0, 8.5],  # Slightly higher weight
+        ],
+
+        # Balancing parameters
+        'balancing': [
+            'none', 
+            # 'upsample', 
+            # 'downsample'
+            ],  # Balancing strategies
+        'balancing_ratio': [1.0, 1.5, 2.0, 2.5, 3.0]  # Ratios for upsampling/downsampling
     }
+
 
 
 def calculate_combined_score(metrics):
@@ -356,6 +400,8 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
         param_grid['learning_rate'],
         param_grid['batch_size'],
         param_grid['class_weights'],
+        param_grid['balancing'],
+        param_grid['balancing_ratio'],
         [False]
     ]
     param_combinations = list(itertools.product(*param_values))
@@ -365,7 +411,7 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
 
     for i, params in enumerate(param_combinations, 1):
         (hidden_size, num_layers, dropout, lr, batch_size,
-         class_weights, bidirectional) = params
+         class_weights, balancing, balancing_ratio, bidirectional) = params
 
         model_params = base_model_params.copy()
         training_params = base_training_params.copy()
@@ -380,6 +426,8 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
         training_params.update({
             'learning_rate': lr,
             'class_weights': class_weights,
+            'balancing': balancing,
+            'balancing_ratio': balancing_ratio,
             'loader_params': {
                 'batch_size': batch_size,
                 'shuffle': True
@@ -389,7 +437,8 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
         print(f"\nTrying combination {i}/{total_combinations}:")
         print(f"Parameters: hidden_size={hidden_size}, num_layers={num_layers}, "
               f"dropout={dropout}, lr={lr}, batch_size={batch_size}, "
-              f"class_weights={class_weights}, bidirectional={bidirectional}")
+              f"class_weights={class_weights}, balancing={balancing}, ratio={balancing_ratio}, "
+              f"bidirectional={bidirectional}")
 
         metrics, splits_metrics = train_cross_validation(
             model_class=model_class,
@@ -409,6 +458,8 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
                 'learning_rate': lr,
                 'batch_size': batch_size,
                 'class_weights': class_weights,
+                'balancing': balancing,
+                'balancing_ratio': balancing_ratio,
                 'bidirectional': bidirectional
             },
             'metrics': metrics,
