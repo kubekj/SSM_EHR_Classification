@@ -214,7 +214,7 @@ def initialize_training(model_class, model_params, training_params, split, devic
 
     # Initialize model and training components
     model = model_class(**model_params).to(device)
-    criterion = nn.CrossEntropyLoss(weight=torch.tensor(training_params['class_weights']).to(device))
+    criterion = nn.CrossEntropyLoss(weight=torch.tensor(training_params['class_weights']).to(device) if training_params['class_weights'] else None)
     optimizer = torch.optim.Adam(
         model.parameters(),
         lr=training_params['learning_rate']
@@ -354,7 +354,7 @@ def define_parameter_grid():
         'learning_rate': [0.0001],  # Learning rates
         'batch_size': [64],  # Batch sizes
         'class_weights': [
-            [1,1]
+            None
             # [1.0, 7.143],  # Original ratio (performed well)
             # [1.0, 8.5],  # Slightly higher weight
         ],
