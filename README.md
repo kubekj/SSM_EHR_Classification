@@ -46,7 +46,6 @@ pip install torch_scatter --extra-index-url https://data.pyg.org/whl/torch-2.2.0
 4 baseline models have been implemented in `Pytorch` and can be trained/tested on `P12`. Each has a unique set of hyperparameters that can be modified, but I've gotten the best performance by running the following commands (_Note: you should unzip the data files before running these, and change the output paths in the commands_):
 
 ## Deep State Space Model (DSSM)
-Our DSSM implementation can be run in two modes:
 
 ### Cross-validation mode
 For standard 5-fold cross-validation with the best hyperparameters:
