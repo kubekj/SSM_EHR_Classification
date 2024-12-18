@@ -5,7 +5,7 @@ Project no. 24 for 02456 taken at Autumn 2024.
 Electronic Health Records (EHRs) are an abundant resource for clinical research and are produced in increasing numbers around the world. Unfortunately, they are also noisy, collected at irregular times, and full of missing data points, making them challenging to learn from. Despite these issues, EHR data contains valuable information for patient outcome forecasting, disease classification, and imputation. As a result, many models have been developed to handle these tasks.
 For classification, most state-of-the-art models are RNNS, particularly variations of the LSTM and GRU architectures (ex: GRU-D, P-LSTM). The ability to handle variable input lengths and retain context from previous measurements is widely speculated to contribute to their dominance, but they are relatively slow and computationally expensive.
 
-Recent advances in deep-state space models (SSMs) have great potential for modelling time series. Similarly to RNNS, SSMs capture temporal dependencies and handle missing values by estimating hidden states from previous data. By learning the underlying state of the system (ex., patient health) from the observed measurements (ex., vital signs, lab results), SSMs can model the hidden dynamics of a patient’s condition while accounting for noise and irregularity. But unlike RNNs, SSMs do this in a more structured and interpretable way by relying on probabilistic transitions between states. They are also more computationally efficient and scalable.
+Recent advances in deep-state space models (SSMs) have great potential for modelling time series. Similarly to RNNS, SSMs capture temporal dependencies and handle missing values by estimating hidden states from previous data. By learning the underlying state of the system (ex., patient health) from the observed measurements (ex., vital signs, lab results), SSMs can model the hidden dynamics of a patient's condition while accounting for noise and irregularity. But unlike RNNs, SSMs do this in a more structured and interpretable way by relying on probabilistic transitions between states. They are also more computationally efficient and scalable.
         
 This project focuses on implementing a deep-state space model for EHR mortality classification and comparing it to current state-of-the-art models. The model can be an adaptation of EHRMamba (easier) or implemented yourself (challenging). Preprocessed data from Physionet 2012, MIMIC-III, and code for several SOTA models will be readily available.
         
@@ -42,12 +42,30 @@ pip install -r requirements.txt
 pip install torch_scatter --extra-index-url https://data.pyg.org/whl/torch-2.2.0+cu118.html
 ```
 
-
-
-
-
 # Run models 
 4 baseline models have been implemented in `Pytorch` and can be trained/tested on `P12`. Each has a unique set of hyperparameters that can be modified, but I've gotten the best performance by running the following commands (_Note: you should unzip the data files before running these, and change the output paths in the commands_):
+
+## Deep State Space Model (DSSM)
+Our DSSM implementation can be run in two modes:
+
+### Cross-validation mode
+For standard 5-fold cross-validation with the best hyperparameters:
+```bash
+python train.py
+```
+
+These commands will use our best-performing configuration:
+- Hidden size: 32
+- LSTM layers: 2
+- Dropout rate: 0.2
+- Learning rate: 0.0001
+- Batch size: 64
+- Class weights: [1.0, 7.143]
+- Bidirectional: True
+
+The model outputs metrics for AUROC, AUPRC, and accuracy, along with loss values for both training and validation sets.
+
+## Baseline Models
 
 `transformer` (https://arxiv.org/abs/1706.03762):
 
