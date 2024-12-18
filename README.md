@@ -63,7 +63,7 @@ These commands will use our best-performing configuration:
 - Class weights: [1.0, 7.143]
 - Bidirectional: True
 
-The model outputs metrics for AUROC, AUPRC, and accuracy, along with loss values for both training and validation sets.
+The model outputs metrics for AUROC, AUPRC, and accuracy, along with loss values, they can be found under `model_outputs/dssm_output/grid_search_results_with_bidirection.json` after running the training script.
 
 ## Baseline Models
 
