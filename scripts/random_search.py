@@ -36,7 +36,7 @@ def train_model(model_class, model_params, training_params, device, split_number
     return split_metrics, model
 
 
-def train_with_randomized_search_cv(model_class, base_model_params, base_training_params, device, n_iter=10):
+def train_with_randomized_search_cv(model_class, base_model_params, base_training_params, device, n_iter=10, param_grid=None):
     """
     Perform random search manually by sampling parameters from the grid.
 
@@ -50,7 +50,8 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
     Returns:
         Best parameters, best metrics, and all results.
     """
-    param_grid = define_parameter_grid()
+    if param_grid is None:
+        param_grid = define_parameter_grid()
     param_distributions = {
         'hidden_size': param_grid['hidden_size'],
         'num_layers': param_grid['num_layers'],
@@ -58,7 +59,7 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
         'learning_rate': param_grid['learning_rate'],
         'batch_size': param_grid['batch_size'],
         'class_weights': param_grid['class_weights'],
-        'bidirectional': [True]
+        'bidirectional': param_grid['bidirectional']
     }
 
     best_metrics = {'auroc': 0}
@@ -120,7 +121,7 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
     return best_params, best_metrics, results
 
 
-def random_search():
+def random_search(n_iter=50,param_grid=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
@@ -152,7 +153,8 @@ def random_search():
         base_model_params,
         base_training_params,
         device,
-        n_iter=50  # You can adjust this number as needed
+        n_iter=n_iter,  # You can adjust this number as needed
+        param_grid=param_grid
     )
 
     results_path = Path('../model_outputs/dssm_output/random_search_results.json')

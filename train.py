@@ -322,7 +322,8 @@ def define_parameter_grid():
         'class_weights': [
             [1.0, 7.143],   # Original ratio (performed well)
             [1.0, 8.5],     # Slightly higher weight
-        ]
+        ],
+        'bidirectional': [False]  # Bidirectional LSTM
     }
 
 
@@ -343,8 +344,9 @@ def calculate_combined_score(metrics):
     return combined_score
 
 
-def train_with_grid_search(model_class, base_model_params, base_training_params, device):
-    param_grid = define_parameter_grid()
+def train_with_grid_search(model_class, base_model_params, base_training_params, device, param_grid=None): 
+    if param_grid is None:
+        param_grid = define_parameter_grid()
     best_metrics = {'combined_score': 0}
     best_params = {}
     results = []
@@ -356,7 +358,7 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
         param_grid['learning_rate'],
         param_grid['batch_size'],
         param_grid['class_weights'],
-        [False]
+        param_grid['bidirectional'],
     ]
     param_combinations = list(itertools.product(*param_values))
 
@@ -489,7 +491,7 @@ def cross_validation():
             print(f"{base_metric}: {value:.4f} ± {std_value:.4f}")
 
 
-def grid_search():
+def grid_search(param_grid=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
@@ -519,7 +521,8 @@ def grid_search():
         DSSM,
         base_model_params,
         base_training_params,
-        device
+        device,
+        param_grid=param_grid
     )
 
     results_path = Path('model_outputs/dssm_output/grid_search_results_with_bidirection.json')
