@@ -537,6 +537,7 @@ def grid_search(param_grid=None):
     print(json.dumps(best_params, indent=2))
     print("\nBest metrics achieved:")
     print(json.dumps(best_metrics, indent=2))
+    return best_params, best_metrics, all_results
 
 
 if __name__ == "__main__":
