@@ -1,5 +1,5 @@
 # Deep State Space Model for Mortality Classification using Electronic Health Records (EHRs).
-Project no. 24 for 02456 taken at Autumn 2024.
+Project no. 24 for 02456 taken at Autumn 2024. The notebook that's supposed to replicate the results (even if it doesn't, as it is explained in the notebook) is `deliverable.ipynb`.
 
 # Project Description
 Electronic Health Records (EHRs) are an abundant resource for clinical research and are produced in increasing numbers around the world. Unfortunately, they are also noisy, collected at irregular times, and full of missing data points, making them challenging to learn from. Despite these issues, EHR data contains valuable information for patient outcome forecasting, disease classification, and imputation. As a result, many models have been developed to handle these tasks.
