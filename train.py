@@ -300,7 +300,8 @@ def train_cross_validation(model_class, model_params, training_params, device, s
             print(f"{k}: {v:.4f}")
 
     # Calculate and save final metrics
-    final_metrics = calculate_final_metrics(splits_metrics) if len(splits_metrics) > 1 else splits_metrics[0]
+    # final_metrics = calculate_final_metrics(splits_metrics) if len(splits_metrics) > 1 else splits_metrics[0]
+    final_metrics = calculate_final_metrics(splits_metrics)
     training_history['final_metrics'] = final_metrics
 
     with open(log_path, 'w') as f:

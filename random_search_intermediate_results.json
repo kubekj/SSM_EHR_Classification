@@ -1,5 +1,7 @@
 {
-    "best_params": {
+    "completed_combinations": 50,
+    "total_combinations": 50,
+    "current_best_params": {
         "hidden_size": 32,
         "num_layers": 2,
         "dropout_rate": 0.2,
@@ -11,7 +13,7 @@
         ],
         "bidirectional": true
     },
-    "best_metrics": {
+    "current_best_metrics": {
         "loss": 0.27379676699638367,
         "accuracy": 0.8813559322033898,
         "auprc": 0.6833333333333333,
