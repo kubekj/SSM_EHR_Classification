@@ -1,5 +1,5 @@
 from models.dssm import DSSM
-from train import define_parameter_grid, initialize_training, train_split
+from train import define_parameter_grid, initialize_training, train_split, calculate_combined_score
 
 import numpy as np
 import torch
@@ -8,21 +8,10 @@ import itertools
 from pathlib import Path
 import random
 
-# Assuming DSSM and other necessary imports are defined elsewhere in the file
 
 def train_model(model_class, model_params, training_params, device, split_number=1):
     """
     Train the model with the given parameters.
-
-    Args:
-        model_class: The model class to train
-        model_params: Model parameters dictionary
-        training_params: Training parameters dictionary
-        device: torch device to use
-        split_number: Split number for cross-validation
-
-    Returns:
-        Metrics and trained model.
     """
     model, dataloaders, criterion, optimizer = initialize_training(
         model_class, model_params, training_params, split_number, device
@@ -36,22 +25,14 @@ def train_model(model_class, model_params, training_params, device, split_number
     return split_metrics, model
 
 
-def train_with_randomized_search_cv(model_class, base_model_params, base_training_params, device, n_iter=10, param_grid=None):
+def train_with_randomized_search_cv(model_class, base_model_params, base_training_params, device, n_iter=10,
+                                    param_grid=None):
     """
     Perform random search manually by sampling parameters from the grid.
-
-    Args:
-        model_class: The model class to train
-        base_model_params: Base model parameters dictionary
-        base_training_params: Base training parameters dictionary
-        device: torch device to use
-        n_iter: Number of random combinations to try
-
-    Returns:
-        Best parameters, best metrics, and all results.
     """
     if param_grid is None:
         param_grid = define_parameter_grid()
+
     param_distributions = {
         'hidden_size': param_grid['hidden_size'],
         'num_layers': param_grid['num_layers'],
@@ -62,7 +43,7 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
         'bidirectional': param_grid['bidirectional']
     }
 
-    best_metrics = {'auroc': 0}
+    best_metrics = {'combined_score': 0}
     best_params = {}
     results = []
 
@@ -76,37 +57,49 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
         training_params = base_training_params.copy()
 
         # Update model and training parameters with sampled values
-        model_params['hidden_size'] = sampled_params['hidden_size']
-        model_params['num_layers'] = sampled_params['num_layers']
-        model_params['dropout_rate'] = sampled_params['dropout_rate']
-        model_params['bidirectional'] = sampled_params['bidirectional']
-        training_params['learning_rate'] = sampled_params['learning_rate']
-        training_params['loader_params']['batch_size'] = sampled_params['batch_size']
-        training_params['class_weights'] = sampled_params['class_weights']
+        model_params.update({
+            'hidden_size': sampled_params['hidden_size'],
+            'num_layers': sampled_params['num_layers'],
+            'dropout_rate': sampled_params['dropout_rate'],
+            'bidirectional': sampled_params['bidirectional']
+        })
+
+        training_params.update({
+            'learning_rate': sampled_params['learning_rate'],
+            'class_weights': sampled_params['class_weights'],
+            'loader_params': {
+                'batch_size': sampled_params['batch_size'],
+                'shuffle': True
+            }
+        })
 
         print(f"\nTrying combination {i + 1}/{n_iter}:")
         for key, value in sampled_params.items():
             print(f"{key}={value}")
 
-        # Train model with these parameters
         metrics, _ = train_model(
             model_class, model_params, training_params, device, split_number=1
         )
 
-        # Save results
+        combined_score = calculate_combined_score(metrics)
+        metrics['combined_score'] = combined_score
+
         results.append({
             'params': sampled_params,
             'metrics': metrics
         })
 
-        # Update best parameters if improved
-        if metrics['auroc'] > best_metrics['auroc']:
+        # Update best parameters if combined score improved
+        if combined_score > best_metrics['combined_score']:
             best_metrics = metrics
             best_params = sampled_params
             print("\nNew best parameters found!")
-            print(f"New best AUROC: {best_metrics['auroc']:.4f}")
+            print(f"New best combined score: {combined_score:.4f}")
+            print(f"AUROC: {metrics['auroc']:.4f}")
+            print(f"AUPRC: {metrics['auprc']:.4f}")
+            print(f"Accuracy: {metrics['accuracy']:.4f}")
 
-        # Save intermediate results to avoid losing progress
+        # Save intermediate results
         save_path = 'random_search_intermediate_results.json'
         intermediate_results = {
             'completed_combinations': i + 1,
@@ -121,7 +114,7 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
     return best_params, best_metrics, results
 
 
-def random_search(n_iter=50,param_grid=None, results_path_str=None):
+def random_search(n_iter=50, param_grid=None, results_path_str=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
@@ -147,18 +140,21 @@ def random_search(n_iter=50,param_grid=None, results_path_str=None):
         }
     }
 
-    # Perform random search with n_iter iterations
     best_params, best_metrics, all_results = train_with_randomized_search_cv(
         DSSM,
         base_model_params,
         base_training_params,
         device,
-        n_iter=n_iter,  # You can adjust this number as needed
+        n_iter=n_iter,
         param_grid=param_grid
     )
-    if (results_path_str is None):
+
+    if results_path_str is None:
         results_path_str = '../model_outputs/dssm_output/random_search_results.json'
     results_path = Path(results_path_str)
+
+    results_path.parent.mkdir(parents=True, exist_ok=True)
+
     with open(results_path, 'w') as f:
         json.dump({
             'best_params': best_params,

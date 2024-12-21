@@ -323,7 +323,7 @@ def define_parameter_grid():
             [1.0, 7.143],   # Original ratio (performed well)
             [1.0, 8.5],     # Slightly higher weight
         ],
-        'bidirectional': [False]  # Bidirectional LSTM
+        'bidirectional': [False, True]  # Bidirectional LSTM
     }
 
 
