@@ -121,7 +121,7 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
     return best_params, best_metrics, results
 
 
-def random_search(n_iter=50,param_grid=None):
+def random_search(n_iter=50,param_grid=None, results_path_str=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
@@ -156,8 +156,9 @@ def random_search(n_iter=50,param_grid=None):
         n_iter=n_iter,  # You can adjust this number as needed
         param_grid=param_grid
     )
-
-    results_path = Path('../model_outputs/dssm_output/random_search_results.json')
+    if (results_path_str is None):
+        results_path_str = '../model_outputs/dssm_output/random_search_results.json'
+    results_path = Path(results_path_str)
     with open(results_path, 'w') as f:
         json.dump({
             'best_params': best_params,

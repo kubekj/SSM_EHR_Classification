@@ -266,9 +266,9 @@ def train_cross_validation(model_class, model_params, training_params, device, s
 
     # Determine which splits to run
     if split_number is not None:
-        if not 1 <= split_number <= 5:
+        if len([1 for i in split_number if not 1 <= i <= 5]) > 0:
             raise ValueError("split_number must be between 1 and 5")
-        splits_to_run = [split_number]
+        splits_to_run = split_number
     else:
         splits_to_run = range(1, 6)
 
@@ -344,7 +344,7 @@ def calculate_combined_score(metrics):
     return combined_score
 
 
-def train_with_grid_search(model_class, base_model_params, base_training_params, device, param_grid=None): 
+def train_with_grid_search(model_class, base_model_params, base_training_params, device, param_grid=None, split_number=None): 
     if param_grid is None:
         param_grid = define_parameter_grid()
     best_metrics = {'combined_score': 0}
@@ -397,7 +397,8 @@ def train_with_grid_search(model_class, base_model_params, base_training_params,
             model_class=model_class,
             model_params=model_params,
             training_params=training_params,
-            device=device
+            device=device,
+            split_number=split_number
         )
 
         combined_score = calculate_combined_score(metrics)
@@ -491,7 +492,7 @@ def cross_validation():
             print(f"{base_metric}: {value:.4f} ± {std_value:.4f}")
 
 
-def grid_search(param_grid=None):
+def grid_search(n_epochs = 100, param_grid=None, split_number=None):
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
@@ -504,7 +505,7 @@ def grid_search(param_grid=None):
     }
 
     base_training_params = {
-        'num_epochs': 100,
+        'num_epochs': n_epochs,
         'class_weights': [1.163, 7.143],
         'loader_params': {
             'batch_size': 32,
@@ -522,7 +523,8 @@ def grid_search(param_grid=None):
         base_model_params,
         base_training_params,
         device,
-        param_grid=param_grid
+        param_grid=param_grid,
+        split_number=split_number
     )
 
     results_path = Path('model_outputs/dssm_output/grid_search_results_with_bidirection.json')
