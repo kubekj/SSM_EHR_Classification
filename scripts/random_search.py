@@ -78,7 +78,7 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
             print(f"{key}={value}")
 
         metrics, _ = train_model(
-            model_class, model_params, training_params, device, split_number=1
+            model_class, model_params, training_params, device, split_number=[1]
         )
 
         combined_score = calculate_combined_score(metrics)
