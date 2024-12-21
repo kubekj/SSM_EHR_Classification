@@ -1,5 +1,5 @@
 from models.dssm import DSSM
-from train import define_parameter_grid, initialize_training, train_split, calculate_combined_score
+from train import calculate_final_metrics, define_parameter_grid, initialize_training, train_split, calculate_combined_score
 
 import numpy as np
 import torch
@@ -78,9 +78,11 @@ def train_with_randomized_search_cv(model_class, base_model_params, base_trainin
             print(f"{key}={value}")
 
         metrics, _ = train_model(
-            model_class, model_params, training_params, device, split_number=[1]
+            model_class, model_params, training_params, device, split_number=1
         )
-
+        metrics['mean_auroc'] = np.mean(metrics['auroc'])
+        metrics['mean_auprc'] = np.mean(metrics['auprc'])
+        metrics['mean_accuracy'] = np.mean(metrics['accuracy'])
         combined_score = calculate_combined_score(metrics)
         metrics['combined_score'] = combined_score
 
